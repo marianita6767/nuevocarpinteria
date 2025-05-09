@@ -11,13 +11,20 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.plaf.basic.BasicScrollBarUI;
 
 import vista.Cotizacion.cotizacion;
-
 
 import vista.catalogo.catalogo;
 import vista.Inventario0.herramientas;
@@ -48,6 +55,8 @@ public class Principal extends javax.swing.JFrame {
         jPanel4.setVisible(true);
         jPanel5.setVisible(false);
         jPanel3.setVisible(false);
+
+
 
 //submenu inventario------------------
         // Inicializar el submenú
