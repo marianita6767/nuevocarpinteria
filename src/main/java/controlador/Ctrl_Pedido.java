@@ -46,15 +46,14 @@ public class Ctrl_Pedido {
 
     public int insertar(Pedido pedido) {
         Connection con = Conexion.getConnection();
-        String sql = "INSERT INTO pedido (nombre, preciototal, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO pedido (nombre, estado, fecha_inicio, fecha_fin, cliente_codigo) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pedido.getNombre());
-            ps.setDouble(2, pedido.getPreciototal());
-            ps.setString(3, pedido.getEstado());
-            ps.setDate(4, new java.sql.Date(pedido.getFecha_inicio().getTime()));
-            ps.setDate(5, new java.sql.Date(pedido.getFecha_fin().getTime()));
-            ps.setInt(6, pedido.getIdCliente());
+            ps.setString(2, pedido.getEstado());
+            ps.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+            ps.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
+            ps.setInt(5, pedido.getIdCliente());
 
             int filasAfectadas = ps.executeUpdate();
 
@@ -86,7 +85,6 @@ public List<MaterialConDetalles> obtenerMateriales() {
             Pedido pedido = new Pedido(
                 rs.getInt("id_pedido"),
                 rs.getString("nombre"),
-                rs.getDouble("preciototal"),
                 rs.getString("estado"),
                 rs.getDate("fecha_inicio"),
                 rs.getDate("fecha_fin"),
@@ -106,19 +104,18 @@ public List<MaterialConDetalles> obtenerMateriales() {
 }
 
     public boolean actualizar(Pedido pedido) {
-        String sql = "UPDATE pedido SET nombre = ?, preciototal = ?, estado = ?, fecha_inicio = ?, fecha_fin = ?, "
+        String sql = "UPDATE pedido SET nombre = ?, estado = ?, fecha_inicio = ?, fecha_fin = ?, "
                 + "cliente_codigo = ?, "
                 + "WHERE id_pedido = ? ";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, pedido.getNombre());
-            stmt.setDouble(2, pedido.getPreciototal());
-            stmt.setString(3, pedido.getEstado());
-            stmt.setDate(4, new java.sql.Date(pedido.getFecha_inicio().getTime()));
-            stmt.setDate(5, new java.sql.Date(pedido.getFecha_fin().getTime()));
-            stmt.setInt(6, pedido.getIdCliente());
-            stmt.setInt(7, pedido.getId_pedido());
+            stmt.setString(2, pedido.getEstado());
+            stmt.setDate(3, new java.sql.Date(pedido.getFecha_inicio().getTime()));
+            stmt.setDate(4, new java.sql.Date(pedido.getFecha_fin().getTime()));
+            stmt.setInt(5, pedido.getIdCliente());
+            stmt.setInt(6, pedido.getId_pedido());
 
             return stmt.executeUpdate() > 0;
 
