@@ -4,22 +4,73 @@
  */
 package vista.proveedor;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GradientPaint;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import javax.accessibility.Accessible;
+import javax.swing.AbstractAction;
+import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.plaf.basic.ComboPopup;
 import modelo.Conexion;
 
 
 public class proveedornuevo extends javax.swing.JDialog {
 
-    
+    private CheckedComboBox<CheckableItem> cmbProducto;
+
     public proveedornuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-         setTitle("Nuevo Proveedor");
+        setTitle("Nuevo Proveedor");
+
+        // Agregar el CheckedComboBox al panel
+        cmbProducto = new CheckedComboBox<>(makeProductModel());
+        cmbProducto.setFont(new Font("Segoe UI", Font.PLAIN, 14)); // Fuente moderna
+
+
+        jPanel1.add(cmbProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 190, 200, 30));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
+
     }
-    
+
+    // Método para crear el modelo de productos
+    private DefaultComboBoxModel<CheckableItem> makeProductModel() {
+        DefaultComboBoxModel<CheckableItem> model = new DefaultComboBoxModel<>();
+        model.addElement(new CheckableItem("Products_1", false));
+        model.addElement(new CheckableItem("Products_2", false));
+        model.addElement(new CheckableItem("Products_3", false));
+        model.addElement(new CheckableItem("Products_4", false));
+        model.addElement(new CheckableItem("Products_5", false));
+        return model;
+    }
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -28,7 +79,7 @@ public class proveedornuevo extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
+        lblProducto = new javax.swing.JLabel();
         btnCancelar = new rojeru_san.RSButtonRiple();
         btnGuardar = new rojeru_san.RSButtonRiple();
         jLabel9 = new javax.swing.JLabel();
@@ -37,10 +88,13 @@ public class proveedornuevo extends javax.swing.JDialog {
         jLabel8 = new javax.swing.JLabel();
         txtNombre = new RSMaterialComponent.RSTextFieldMaterial();
         txtdireccion1 = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel10 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(490, 480));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel2.setBackground(new java.awt.Color(46, 49, 82));
@@ -51,15 +105,15 @@ public class proveedornuevo extends javax.swing.JDialog {
         jLabel1.setText("Agregar movimiento");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
-        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 50));
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel5.setText("Correo");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, -1, -1));
 
-        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
-        jLabel7.setText("Direccion");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+        lblProducto.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        lblProducto.setText("Producto");
+        jPanel1.add(lblProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Cancelar");
@@ -85,7 +139,7 @@ public class proveedornuevo extends javax.swing.JDialog {
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setText("Telefono:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 60, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, -1, -1));
 
         txttelefono.setForeground(new java.awt.Color(0, 0, 0));
         txttelefono.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -111,11 +165,11 @@ public class proveedornuevo extends javax.swing.JDialog {
                 txtcorreoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 200, 30));
+        jPanel1.add(txtcorreo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 200, 30));
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel8.setText("Nombre:");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, 20));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, 20));
 
         txtNombre.setForeground(new java.awt.Color(0, 0, 0));
         txtNombre.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -141,28 +195,13 @@ public class proveedornuevo extends javax.swing.JDialog {
                 txtdireccion1ActionPerformed(evt);
             }
         });
-        jPanel1.add(txtdireccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 200, 30));
+        jPanel1.add(txtdireccion1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 200, 30));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 480, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(0, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 480, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(0, 0, Short.MAX_VALUE)))
-        );
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setText("Direccion");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 490, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -313,15 +352,174 @@ public class proveedornuevo extends javax.swing.JDialog {
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblProducto;
     private RSMaterialComponent.RSTextFieldMaterial txtNombre;
     private RSMaterialComponent.RSTextFieldMaterial txtcorreo;
     private RSMaterialComponent.RSTextFieldMaterial txtdireccion1;
     private RSMaterialComponent.RSTextFieldMaterial txttelefono;
     // End of variables declaration//GEN-END:variables
+// Clases internas para el CheckedComboBox
+    class CheckableItem {
+
+        private final String text;
+        private boolean selected;
+
+        protected CheckableItem(String text, boolean selected) {
+            this.text = text;
+            this.selected = selected;
+        }
+
+        public boolean isSelected() {
+            return selected;
+        }
+
+        public void setSelected(boolean selected) {
+            this.selected = selected;
+        }
+
+        @Override
+        public String toString() {
+            return text;
+        }
+    }
+
+    class CheckedComboBox<E extends CheckableItem> extends JComboBox<E> {
+
+        protected boolean keepOpen;
+        private final JPanel panel = new JPanel(new BorderLayout());
+
+        protected CheckedComboBox(ComboBoxModel<E> model) {
+            super(model);
+            setBackground(new Color(255, 255, 255)); // Fondo blanco para coincidir con jPanel1
+            setForeground(Color.DARK_GRAY); // Texto oscuro
+        }
+
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(200, 40); // Aumentar altura para un look más moderno
+        }
+
+        @Override
+        public void updateUI() {
+            setRenderer(null);
+            super.updateUI();
+
+            Accessible a = getAccessibleContext().getAccessibleChild(0);
+            if (a instanceof ComboPopup) {
+                ((ComboPopup) a).getList().addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent e) {
+                        JList<?> list = (JList<?>) e.getComponent();
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            keepOpen = true;
+                            updateItem(list.locationToIndex(e.getPoint()));
+                        }
+                    }
+                });
+            }
+
+      
+            DefaultListCellRenderer renderer = new DefaultListCellRenderer() {
+                @Override
+                public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                    Component c = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                    if (index >= 0) {
+                        c.setBackground(isSelected ? new Color(0, 120, 215, 50) : new Color(255, 255, 255));
+                        c.setForeground(Color.DARK_GRAY);
+                    } else {
+                        c.setBackground(new Color(0, 0, 0, 0)); // Fondo transparente para el texto seleccionado
+                    }
+                    return c;
+                }
+            };
+            JCheckBox check = new JCheckBox();
+            check.setOpaque(false);
+            check.setForeground(new Color(0, 120, 215)); // Color de casilla moderna
+            setRenderer((list, value, index, isSelected, cellHasFocus) -> {
+                panel.removeAll();
+                Component c = renderer.getListCellRendererComponent(
+                        list, value, index, isSelected, cellHasFocus);
+                if (index < 0) {
+                    String txt = getCheckedItemString(list.getModel());
+                    JLabel l = (JLabel) c;
+                    l.setText(txt.isEmpty() ? " " : txt);
+                    l.setForeground(Color.DARK_GRAY);
+                    l.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+                    panel.setOpaque(false); // Hacer el panel transparente
+                    panel.setBackground(new Color(0, 0, 0, 0)); // Fondo transparente
+                } else {
+                    check.setSelected(value.isSelected());
+                    panel.add(check, BorderLayout.WEST);
+                    panel.setBackground(isSelected ? new Color(0, 120, 215, 50) : new Color(255, 255, 255));
+                }
+                panel.add(c, BorderLayout.CENTER);
+                return panel;
+            });
+            initActionMap();
+        }
+
+        protected void initActionMap() {
+            KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_SPACE, 0);
+            getInputMap(JComponent.WHEN_FOCUSED).put(ks, "checkbox-select");
+            getActionMap().put("checkbox-select", new AbstractAction() {
+                public void actionPerformed(ActionEvent e) {
+                    Accessible a = getAccessibleContext().getAccessibleChild(0);
+                    if (a instanceof ComboPopup) {
+                        updateItem(((ComboPopup) a).getList().getSelectedIndex());
+                    }
+                }
+            });
+        }
+
+        protected void updateItem(int index) {
+            if (isPopupVisible() && index >= 0) {
+                E item = getItemAt(index);
+                item.setSelected(!item.isSelected());
+                setSelectedIndex(-1);
+                setSelectedItem(item);
+            }
+        }
+
+        @Override
+        public void setPopupVisible(boolean v) {
+            if (keepOpen) {
+                keepOpen = false;
+            } else {
+                super.setPopupVisible(v);
+            }
+        }
+
+        protected static <E extends CheckableItem> String getCheckedItemString(ListModel<E> model) {
+            return IntStream.range(0, model.getSize())
+                    .mapToObj(model::getElementAt)
+                    .filter(CheckableItem::isSelected)
+                    .map(Objects::toString)
+                    .sorted()
+                    .collect(Collectors.joining(", "));
+        }
+    }
+
+    // Panel personalizado para un efecto visual moderno
+    class ModernPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            GradientPaint gp = new GradientPaint(0, 0, getBackground(), getWidth(), getHeight(), getBackground().brighter(), true);
+            g2d.setPaint(gp);
+            g2d.fillRoundRect(0, 0, getWidth(), getHeight(), 10, 10);
+            g2d.setColor(new Color(0, 0, 0, 20));
+            g2d.drawRoundRect(0, 0, getWidth() - 1, getHeight() - 1, 10, 10);
+        }
+    }
+
+
+
 }
