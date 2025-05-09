@@ -269,7 +269,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            
+
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
 
             dos.setText(" Inventario           ▼");
@@ -288,7 +288,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             jPanel3.add(dos, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 250, 250, 50));
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 350, 250, 50));
-            
+
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
 
             submenuVentasVisible = false;
@@ -332,6 +332,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
         tres1 = new rojeru_san.RSButton();
         cuatro1 = new rojeru_san.RSButton();
         nueve1 = new rojeru_san.RSButton();
+        nueve2 = new rojeru_san.RSButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
@@ -609,11 +610,11 @@ public class PrincipalUsu extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(uno, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(1, 1, 1)
-                .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(1, 1, 1)
-                .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(dos, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(tres, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cuatro, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nueve, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -707,6 +708,22 @@ public class PrincipalUsu extends javax.swing.JFrame {
             }
         });
 
+        nueve2.setBackground(new java.awt.Color(29, 30, 81));
+        nueve2.setBorder(null);
+        nueve2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ajustes (1).png"))); // NOI18N
+        nueve2.setColorHover(new java.awt.Color(128, 128, 128));
+        nueve2.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        nueve2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                nueve2MouseEntered(evt);
+            }
+        });
+        nueve2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nueve2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -716,6 +733,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             .addComponent(nueve1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(tres1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(nueve2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -731,6 +749,8 @@ public class PrincipalUsu extends javax.swing.JFrame {
                         .addComponent(cuatro1, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(nueve1, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nueve2, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -743,11 +763,11 @@ public class PrincipalUsu extends javax.swing.JFrame {
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
                 .addComponent(contenedor, javax.swing.GroupLayout.PREFERRED_SIZE, 1491, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 6, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1316, Short.MAX_VALUE))
+                .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, 1322, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -861,7 +881,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             jPanel3.add(submenuInventario, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 300, 250, 100)); // Submenú (Materiales + Herramientas)
             jPanel3.add(tres, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 400, 250, 50));
             jPanel3.add(cuatro, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 450, 250, 50));
-            
+
             jPanel3.add(nueve, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 500, 250, 50));
             jPanel1.add(contenedor, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 20, 1290, 730));
 
@@ -987,6 +1007,14 @@ public class PrincipalUsu extends javax.swing.JFrame {
         animation_salir();
     }//GEN-LAST:event_cuatro1MouseEntered
 
+    private void nueve2MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_nueve2MouseEntered
+        animation_salir();
+    }//GEN-LAST:event_nueve2MouseEntered
+
+    private void nueve2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nueve2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nueve2ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1050,6 +1078,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
     private rojeru_san.RSButton noti;
     private rojeru_san.RSButton nueve;
     private rojeru_san.RSButton nueve1;
+    private rojeru_san.RSButton nueve2;
     private rojerusan.RSPanelImage rSPanelImage3;
     private rojeru_san.RSButton tres;
     private rojeru_san.RSButton tres1;
@@ -1062,9 +1091,9 @@ public class PrincipalUsu extends javax.swing.JFrame {
         this.dos.setSelected(false);
         this.tres.setSelected(false);
         this.cuatro.setSelected(false);
-        
+
         this.nueve.setSelected(false);
-        
+
     }
 
 }
