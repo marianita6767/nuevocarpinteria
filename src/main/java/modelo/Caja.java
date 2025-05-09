@@ -16,21 +16,21 @@ public class Caja {
     private String fecha;
     private String descripcion;
     private Double monto;
-    private String categoria;
+    private String Categoria_idCategoria;
 
-    public Caja(String fecha, String descripcion, Double monto, String categoria) {
+    public Caja(String fecha, String descripcion, Double monto, String Categoria_idCategoria) {
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.monto = monto;
-        this.categoria = categoria;
+        this.Categoria_idCategoria = Categoria_idCategoria;
     }
 
-    public Caja(int id_codigo, String fecha, String descripcion, Double monto, String categoria) {
+    public Caja(int id_codigo, String fecha, String descripcion, Double monto, String Categoria_idCategoria) {
         this.id_codigo = id_codigo;
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.monto = monto;
-        this.categoria = categoria;
+        this.Categoria_idCategoria = Categoria_idCategoria;
     }
 
     public int getId_codigo() {
@@ -65,13 +65,15 @@ public class Caja {
         this.monto = monto;
     }
 
-    public String getCategoria() {
-        return categoria;
+    public String getCategoria_idCategoria() {
+        return Categoria_idCategoria;
     }
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
+    public void setCategoria_idCategoria(String Categoria_idCategoria) {
+        this.Categoria_idCategoria = Categoria_idCategoria;
     }
+
+   
     
     
 

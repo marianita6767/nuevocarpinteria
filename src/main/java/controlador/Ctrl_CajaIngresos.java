@@ -22,14 +22,14 @@ public class Ctrl_CajaIngresos {
     private final String movimiento = "ingreso";
 
     public boolean insertar(Caja caja) {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento, categoria) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento, Categoria_idCategoria) VALUES (?,?,?,?,?)";
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, caja.getFecha());
             stmt.setString(2, caja.getDescripcion());
             stmt.setDouble(3, caja.getMonto());
             stmt.setString(4, movimiento);
-            stmt.setString(5, caja.getCategoria()); // 👈 'ingreso'
+            stmt.setString(5, caja.getCategoria_idCategoria()); // 👈 'ingreso'
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -61,7 +61,7 @@ public class Ctrl_CajaIngresos {
     }
 
     public boolean actualizar(Caja caja) {
-        String sql = "UPDATE caja SET fecha = ?, descripcion = ?, monto = ?, categoria = ? WHERE id_codigo = ? AND movimiento = ?";
+        String sql = "UPDATE caja SET fecha = ?, descripcion = ?, monto = ?, Categoria_idCategoria = ? WHERE id_codigo = ? AND movimiento = ?";
         try (Connection conn = Conexion.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, caja.getFecha());
@@ -69,7 +69,7 @@ public class Ctrl_CajaIngresos {
             stmt.setDouble(3, caja.getMonto());
             stmt.setInt(4, caja.getId_codigo());
             stmt.setString(5, movimiento);
-            stmt.setString(6, caja.getCategoria()); // 👈 Solo si es 'ingreso'
+            stmt.setString(6, caja.getCategoria_idCategoria()); // 👈 Solo si es 'ingreso'
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             e.printStackTrace();

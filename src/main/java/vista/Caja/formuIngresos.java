@@ -159,7 +159,7 @@ public class formuIngresos extends javax.swing.JDialog {
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
             String descripcion = txtDetallenuevo.getText();
             double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String categoria = comboCategoria.getSelectedItem().toString();
+            String Categoria_idCategoria = comboCategoria.getSelectedItem().toString();
 
             // Validar categoría seleccionada
             if (comboCategoria.getSelectedIndex() == 0) {
@@ -173,7 +173,7 @@ public class formuIngresos extends javax.swing.JDialog {
                 monto,
                 "ingreso",
                 descripcion,
-                categoria
+                Categoria_idCategoria
             );
             
             if (exito) {
@@ -198,15 +198,15 @@ public class formuIngresos extends javax.swing.JDialog {
     
 }
     }//GEN-LAST:event_btnGuardarActionPerformed
-   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String categoria)throws SQLException{
-   String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
+   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String Categoria_idCategoria)throws SQLException{
+   String sql = "INSERT INTO caja (fecha, monto, descripcion, Categoria_idCategoria, movimiento) VALUES (?, ?, ?, ?, ?)";
    
     try (Connection con = new Conexion().getConnection(); 
          PreparedStatement ps = con.prepareStatement(sql)) {
         ps.setString(1, fecha);
         ps.setDouble(2, monto);
         ps.setString(3, descripcion);
-        ps.setString(4, categoria);
+        ps.setString(4, Categoria_idCategoria);
         ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
         return ps.executeUpdate() > 0;
     }
