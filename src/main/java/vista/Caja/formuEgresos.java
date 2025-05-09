@@ -154,9 +154,10 @@ public class formuEgresos extends javax.swing.JDialog {
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
             String descripcion = txtDetallenuevo.getText();
             Double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
+            String Categoria_idCategoria = (String) cmbStock.getSelectedItem();
 
             // Insertar en BD
-            if (insertarEtapa(fecha, descripcion,monto)) {
+            if (insertarEtapa(fecha, descripcion,monto,Categoria_idCategoria)) {
                 this.dispose();
 
             }
@@ -244,8 +245,8 @@ public class formuEgresos extends javax.swing.JDialog {
     private com.toedter.calendar.JDateChooser txtPago;
     // End of variables declaration//GEN-END:variables
 
-   private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento) VALUES (?, ?,?,'egreso')";
+   private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto, String Categoria_idCategoria) throws SQLException {
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento,Categoria_idCategoria) VALUES (?, ?,?,'egreso')";
 
          try (Connection con = Conexion.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {

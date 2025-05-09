@@ -22,14 +22,14 @@ public class Ctrl_CajaEgresos {
     private final String movimiento = "egreso";
 
     public boolean insertar(Caja caja) {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento, categoria) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento, Categoria_idCategoria) VALUES (?,?,?,?,?)";
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setString(1, caja.getFecha());
             stmt.setString(2, caja.getDescripcion());
             stmt.setDouble(3, caja.getMonto());
             stmt.setString(4, movimiento);  // 👈 'egreso'
-            stmt.setString(5, caja.getCategoria());
+            stmt.setString(5, caja.getCategoria_idCategoria());
             return stmt.executeUpdate() > 0;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -65,7 +65,7 @@ public class Ctrl_CajaEgresos {
 
 // Mejora el método actualizar con mensajes más descriptivos
 public boolean actualizar(Caja caja) {
-    String sql = "UPDATE caja SET fecha = ?, descripcion = ?, monto = ?, categoria = ? WHERE id_codigo = ? AND movimiento = ?";
+    String sql = "UPDATE caja SET fecha = ?, descripcion = ?, monto = ?, Categoria_idCategoria = ? WHERE id_codigo = ? AND movimiento = ?";
     
     try (Connection conn = Conexion.getConnection();
          PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -73,7 +73,7 @@ public boolean actualizar(Caja caja) {
         stmt.setString(1, caja.getFecha());
         stmt.setString(2, caja.getDescripcion());
         stmt.setDouble(3, caja.getMonto());
-        stmt.setString(4,caja.getCategoria());
+        stmt.setString(4,caja.getCategoria_idCategoria());
         stmt.setInt(5, caja.getId_codigo());
         stmt.setString(6, movimiento);
         

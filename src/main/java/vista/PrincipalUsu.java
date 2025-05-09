@@ -1093,7 +1093,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
         this.cuatro.setSelected(false);
 
         this.nueve.setSelected(false);
-
+        this.Diez.setSelected(false);
     }
 
 }

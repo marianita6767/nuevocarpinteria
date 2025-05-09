@@ -56,7 +56,7 @@ public final class Ingresos extends javax.swing.JPanel {
             caja.getId_codigo(),
             caja.getFecha(),
             caja.getDescripcion(),
-            caja.getCategoria(),
+            caja.getCategoria_idCategoria(),
             caja.getMonto()
         });
     }
