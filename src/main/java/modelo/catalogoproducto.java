@@ -53,11 +53,12 @@ public class catalogoproducto {
         this.imagen = imagen;
     }
     
-     public int getIdCategoria() {
-        try {
-            return Integer.parseInt(this.categoria);
-        } catch (NumberFormatException e) {
-            return -1; // Retorna -1 si no es un número (cuando es nombre)
-        }
+  
+   public int getIdCategoriaInt() {
+    try {
+        return Integer.parseInt(this.categoria); // Convierte el String a int
+    } catch (NumberFormatException e) {
+        return 0; // Valor por defecto o maneja el error como necesites
     }
+}
 }

@@ -9,6 +9,9 @@ import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
@@ -17,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.Catalogocategoria;
+import modelo.Conexion;
 import modelo.catalogoproducto;
 /**
  *
@@ -231,89 +235,54 @@ public catalogoNuevo(java.awt.Frame parent, boolean modal) {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-
-        
-                                               
+                                        
     try {
-        // 1. Validar campos obligatorios
+        // Validaciones
         if (txtNombre.getText().trim().isEmpty()) {
-            JOptionPane.showMessageDialog(this, 
-                "El nombre del producto es obligatorio", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            txtNombre.requestFocus();
+            JOptionPane.showMessageDialog(this, "Ingrese el nombre del producto", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 2. Validar categoría seleccionada
         if (cmbCategoria.getSelectedIndex() <= 0) {
-            JOptionPane.showMessageDialog(this, 
-                "Debe seleccionar una categoría válida", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            cmbCategoria.requestFocus();
+            JOptionPane.showMessageDialog(this, "Seleccione una categoría válida", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // 3. Obtener la categoría seleccionada
-        Catalogocategoria categoriaSeleccionada;
-        try {
-            categoriaSeleccionada = (Catalogocategoria) cmbCategoria.getSelectedItem();
-        } catch (ClassCastException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al obtener la categoría seleccionada", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // 4. Manejar imagen (opcional)
-        byte[] imagenProducto = this.imagenBytes;
-        if (imagenProducto == null) {
-            int respuesta = JOptionPane.showConfirmDialog(this, 
-                "¿Desea continuar sin imagen?", 
-                "Confirmación", 
-                JOptionPane.YES_NO_OPTION);
-            
-            if (respuesta != JOptionPane.YES_OPTION) {
-                return;
-            }
-            imagenProducto = new byte[0]; // Imagen vacía
-        }
-
-        // 5. Crear el objeto producto
-        this.producto = new catalogoproducto(
+        // Obtener categoría seleccionada
+        Catalogocategoria catSeleccionada = (Catalogocategoria) cmbCategoria.getSelectedItem();
+        
+        // Crear producto
+        catalogoproducto nuevoProducto = new catalogoproducto(
             0, // ID se generará automáticamente
             txtNombre.getText().trim(),
-            String.valueOf(categoriaSeleccionada.getIdCategoria()),
-            imagenProducto
+            String.valueOf(catSeleccionada.getIdCategoria()),
+            (imagenBytes != null) ? imagenBytes : new byte[0]
         );
 
-        // 6. Guardar en base de datos
-        ctrl_productocatalogo ctrlProducto = new ctrl_productocatalogo();
-        if (ctrlProducto.insertar(this.producto)) {
-            this.productoguardado = true;
-            JOptionPane.showMessageDialog(this, 
-                "Producto guardado exitosamente", 
-                "Éxito", 
-                JOptionPane.INFORMATION_MESSAGE);
-            this.dispose();
-        } else {
-            JOptionPane.showMessageDialog(this, 
-                "Error al guardar en la base de datos", 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+        // Guardar en base de datos (usando nombres de columnas correctos)
+        String sql = "INSERT INTO catalogo_producto(nombre, idCategoria, img) VALUES (?, ?, ?)";
+        
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql)) {
+            
+            stmt.setString(1, nuevoProducto.getNombre());
+            stmt.setInt(2, nuevoProducto.getIdCategoriaInt()); // Usar el método que convierte a int
+            stmt.setBytes(3, nuevoProducto.getImagen());
+            
+            if (stmt.executeUpdate() > 0) {
+                JOptionPane.showMessageDialog(this, "Producto guardado exitosamente");
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo guardar el producto");
+            }
         }
-
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, 
-            "Error inesperado: " + e.getMessage(), 
+            "Error al guardar: " + e.getMessage(),
             "Error", 
             JOptionPane.ERROR_MESSAGE);
         e.printStackTrace();
     }
-
-    
 
         
     }//GEN-LAST:event_btnGuardarActionPerformed

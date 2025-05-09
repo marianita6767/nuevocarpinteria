@@ -3,6 +3,7 @@ package controlador;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class Ctrl_catalogocategoria {
     
     // Método para crear una nueva categoría
     public boolean crearCategoria(Catalogocategoria categoria) {
-        String sql = "INSERT INTO categoria(nombre) VALUES (?)";
+        String sql = "INSERT INTO categoriacatalogo(nombre) VALUES (?)";
         
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -38,32 +39,11 @@ public class Ctrl_catalogocategoria {
         return false;
     }
     
-    // Método para obtener todas las categorías
-    public List<Catalogocategoria> obtenerTodasCategorias() {
-        List<Catalogocategoria> categorias = new ArrayList<>();
-        String sql = "SELECT idCategoria, nombre FROM categoria";
-        
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-            
-            while (rs.next()) {
-                Catalogocategoria cat = new Catalogocategoria(
-                    rs.getInt("idCategoria"),
-                    rs.getString("nombre")
-                );
-                categorias.add(cat);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al obtener categorías: " + e.getMessage());
-            e.printStackTrace();
-        }
-        return categorias;
-    }
+ 
     
     // Método para actualizar una categoría
     public boolean actualizarCategoria(Catalogocategoria categoria) {
-        String sql = "UPDATE categoria SET nombre = ? WHERE idCategoria = ?";
+        String sql = "UPDATE categoriacatalogo SET nombre = ? WHERE idCategoria = ?";
         
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -81,7 +61,7 @@ public class Ctrl_catalogocategoria {
     
     // Método para eliminar una categoría
     public boolean eliminarCategoria(int idCategoria) {
-        String sql = "DELETE FROM categoria WHERE idCategoria = ?";
+        String sql = "DELETE FROM categoriacatalogo WHERE idCategoria = ?";
         
         try (Connection con = Conexion.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -95,29 +75,63 @@ public class Ctrl_catalogocategoria {
         return false;
     }
     
-   public void cargarCategoriasEnCombo(RSMaterialComponent.RSComboBoxMaterial comboBox) {
-    try {
-        comboBox.removeAllItems();
-        comboBox.addItem(new Catalogocategoria(0, "Seleccione categoría"));
+ 
+    
+    // Método para obtener todas las categorías
+    public List<Catalogocategoria> obtenerTodasCategorias() {
+        List<Catalogocategoria> categorias = new ArrayList<>();
         
-        List<Catalogocategoria> categorias = obtenerTodasCategorias();
-        if (categorias.isEmpty()) {
-            System.out.println("No se encontraron categorías en la base de datos");
+        // USAR EL NOMBRE EXACTO DE LA COLUMNA QUE EXISTE EN TU BD
+        String sql = "SELECT idCategoria, nombre FROM categoriacatalogo ORDER BY nombre";
+        
+        try (Connection con = Conexion.getConnection();
+             PreparedStatement stmt = con.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+            
+            while (rs.next()) {
+                Catalogocategoria cat = new Catalogocategoria(
+                    rs.getInt("idCategoria"),  // Nombre exacto de columna
+                    rs.getString("nombre")     // Nombre exacto de columna
+                );
+                categorias.add(cat);
+            }
+        } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, 
-                "No hay categorías registradas", 
-                "Advertencia", 
-                JOptionPane.WARNING_MESSAGE);
+                "Error al cargar categorías. Verifica:\n"
+                + "1. Que la tabla 'categoria' existe\n"
+                + "2. Que las columnas 'idCategoria' y 'nombre' existen\n"
+                + "3. Detalle técnico: " + e.getMessage(),
+                "Error de base de datos", 
+                JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
-        
-        for (Catalogocategoria cat : categorias) {
-            comboBox.addItem(cat);
-        }
-    } catch (Exception e) {
-        System.err.println("Error en cargarCategoriasEnCombo: " + e.getMessage());
-        JOptionPane.showMessageDialog(null, 
-            "Error al cargar categorías: " + e.getMessage(),
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
+        return categorias;
     }
-}
+    
+    // Método para cargar categorías en ComboBox
+    public void cargarCategoriasEnCombo(RSMaterialComponent.RSComboBoxMaterial comboBox) {
+        try {
+            comboBox.removeAllItems();
+            comboBox.addItem(new Catalogocategoria(0, "Seleccione categoría"));
+            
+            List<Catalogocategoria> categorias = obtenerTodasCategorias();
+            
+            if (categorias.isEmpty()) {
+                JOptionPane.showMessageDialog(null, 
+                    "No se encontraron categorías registradas", 
+                    "Advertencia", 
+                    JOptionPane.WARNING_MESSAGE);
+            }
+            
+            for (Catalogocategoria cat : categorias) {
+                comboBox.addItem(cat);
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, 
+                "Error al cargar categorías: " + e.getMessage(),
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
 }
