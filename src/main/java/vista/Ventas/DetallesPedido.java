@@ -30,6 +30,17 @@ public class DetallesPedido extends javax.swing.JPanel {
     private void initComponents() {
 
         btnVolver = new RSMaterialComponent.RSButtonShape();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jSeparator2 = new javax.swing.JSeparator();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -47,7 +58,45 @@ public class DetallesPedido extends javax.swing.JPanel {
                 btnVolverActionPerformed(evt);
             }
         });
-        add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 130, 30));
+        add(btnVolver, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 130, 30));
+
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel3.setText("Detalles del Pedido #");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(280, 10, 190, 20));
+
+        add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 60, 820, 40));
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel10.setText("Pedido: ");
+        add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 80, 20));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel7.setText("Nombre: ");
+        add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 80, 20));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel8.setText("Estado:");
+        add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 190, 80, 20));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel6.setText("Cliente: ");
+        add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 80, 20));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel9.setText("Fecha inicio:");
+        add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 120, 130, 20));
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel5.setText("Fecha fin:");
+        add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 160, 130, 20));
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setText("Pedido: NombrePedido");
+        add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 160, 220, 20));
+        add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 230, 700, 40));
+        add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 410, 700, 40));
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnVolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVolverActionPerformed
@@ -65,5 +114,16 @@ public class DetallesPedido extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonShape btnVolver;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     // End of variables declaration//GEN-END:variables
 }
