@@ -111,7 +111,7 @@ public class silla extends javax.swing.JPanel {
     if (dialog.productoguardado && dialog.producto != null) {
         ctrl_productocatalogo controlador = new ctrl_productocatalogo();
         
-        if (controlador.insertar(dialog.producto)) {
+        if (controlador.insertarProducto(dialog.producto)) {
             // Agregar el producto al panel visual
             agregarproducto(
                 dialog.producto,

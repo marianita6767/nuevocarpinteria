@@ -7,6 +7,7 @@ package controlador;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -50,25 +51,55 @@ public class ctrl_productocatalogo {
 
     }
 
+public boolean insertarProducto(catalogoproducto producto) {
+    // USAR LOS NOMBRES EXACTOS QUE MUESTRA 'SHOW CREATE TABLE'
+    String sql = "INSERT INTO catalogo_producto(nombre, categoria_id, imagen) VALUES (?, ?, ?)";
     
-// Modifica el método insertar
-public boolean insertar(catalogoproducto producto) {
-    String sql = "INSERT INTO catalogo_producto(nombre, Categoria_idCategoria, img) VALUES (?, ?, ?)";
-    
-    try (Connection con = Conexion.getConnection(); 
+    try (Connection con = Conexion.getConnection();
          PreparedStatement stmt = con.prepareStatement(sql)) {
 
+        // 1. Nombre del producto
         stmt.setString(1, producto.getNombre());
-        stmt.setInt(2, Integer.parseInt(producto.getCategoria())); // Convertir a int
-        stmt.setBytes(3, producto.getImagen());
         
-        return stmt.executeUpdate() > 0;
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al insertar: " + e.getMessage());
-        e.printStackTrace();
-        return false;
+        // 2. ID de categoría (convertir a entero)
+        stmt.setInt(2, Integer.parseInt(producto.getCategoria()));
+        
+        // 3. Imagen (manejo de nulos)
+        if (producto.getImagen() != null && producto.getImagen().length > 0) {
+            stmt.setBytes(3, producto.getImagen());
+        } else {
+            stmt.setNull(3, java.sql.Types.BLOB);
+        }
+
+        // Ejecutar y mostrar resultado
+        int result = stmt.executeUpdate();
+        if (result > 0) {
+            JOptionPane.showMessageDialog(null, "✅ Producto guardado");
+            return true;
+        }
+    } catch (SQLException e) {
+        mostrarErrorDetallado(e);
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, 
+            "Formato de categoría inválido", "Error", JOptionPane.ERROR_MESSAGE);
     }
+    return false;
 }
+
+private void mostrarErrorDetallado(SQLException e) {
+    String mensaje = "🔴 Error SQL (" + e.getErrorCode() + "):\n";
+    
+    if (e.getMessage().contains("unknown column")) {
+        mensaje += "COLUMNA INCORRECTA: Verifica los nombres de columnas:\n"
+                 + "1. Ejecuta 'SHOW CREATE TABLE catalogo_producto'\n"
+                 + "2. Ajusta la consulta SQL en insertarProducto()";
+    } else {
+        mensaje += e.getMessage();
+    }
+    
+    JOptionPane.showMessageDialog(null, mensaje, "Error de BD", JOptionPane.ERROR_MESSAGE);
+}
+  
 
 // Modifica el método obtenerproducto
 public List<productoConDetalles> obtenerproducto() {
