@@ -1,15 +1,15 @@
 package modelo;
 
+import java.awt.Image;
+
 public class Catalogocategoria {
     private int idCategoria;
     private String nombre;
+    private Image imagen;
 
-    public Catalogocategoria() {
-    }
-
-    public Catalogocategoria(int idCategoria, String nombre) {
-        this.idCategoria = idCategoria;
+    public Catalogocategoria(String nombre, Image imagen) {
         this.nombre = nombre;
+        this.imagen = imagen;
     }
 
     // Getters y Setters
@@ -29,8 +29,11 @@ public class Catalogocategoria {
         this.nombre = nombre;
     }
 
-    @Override
-    public String toString() {
-        return nombre; // Para mostrar correctamente en JComboBox
+    public Image getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Image imagen) {
+        this.imagen = imagen;
     }
 }
