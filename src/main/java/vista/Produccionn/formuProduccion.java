@@ -8,6 +8,7 @@ import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
@@ -139,7 +140,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jLabel2.setText("Nombre:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
-        txtdimen.setEditable(false);
         txtdimen.setBackground(new java.awt.Color(255, 255, 255));
         txtdimen.setForeground(new java.awt.Color(0, 0, 0));
         txtdimen.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -160,7 +160,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jLabel3.setText("Dimensiones:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
-        txtcantidad.setEditable(false);
         txtcantidad.setBackground(new java.awt.Color(255, 255, 255));
         txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtcantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -206,8 +205,89 @@ public class formuProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
-        
+// 1. Mostrar diálogo de confirmación
+        alertaa confirmDialog = new alertaa(
+                (Frame) this.getParent(),
+                true,
+                "Confirmar",
+                "¿Desea guardar los datos?"
+        );
+        confirmDialog.setVisible(true);
+
+        // 2. Si el usuario no confirma, salir
+        if (!confirmDialog.opcionConfirmada) {
+            return;
+        }
+// Validar campos obligatorios
+        if (BoxNombreP.getSelectedIndex() == 0
+                || txtinicio.getDate() == null
+                || txtfinal.getDate() == null
+                || Boxestado.getSelectedIndex() == 0) {
+            new espacio_alerta((Frame) this.getParent(), true, "Error", "Todos los campos son obligatorios").setVisible(true);
+            return;
+        }
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        try {
+            con = Conexion.getConnection();
+
+            // 1. Obtener el iddetalle_pedido basado en el nombre seleccionado
+            int idDetallePedido = obtenerIdDetallePedido(con, BoxNombreP.getSelectedItem().toString());
+            if (idDetallePedido == -1) {
+                new Error_id_((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
+            return;
+            }
+
+            // 2. Insertar en la tabla produccion
+            String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) "
+                    + "VALUES (?, ?, ?, ?)";
+
+            ps = con.prepareStatement(sql);
+            ps.setDate(1, new Date(txtinicio.getDate().getTime()));
+            ps.setDate(2, new Date(txtfinal.getDate().getTime()));
+            ps.setString(3, Boxestado.getSelectedItem().toString());
+            ps.setInt(4, idDetallePedido);
+
+            int filasAfectadas = ps.executeUpdate();
+
+            if (filasAfectadas > 0) {
+                new Datos_guardados(
+                        (Frame) this.getParent(),
+                        true, 
+                        "exito",
+                        "Datos guardados"
+                ).setVisible(true);
+                this.dispose();
+            } else {
+                new DatosActualizados(
+                        (Frame) this.getParent(),
+                        true, 
+                        "exito",
+                        "Datos guardados"
+                ).setVisible(true);
+            }
+        } catch (SQLException e) {
+            new Error_guardar(
+                        (Frame) this.getParent(),
+                        true, 
+                        "exito",
+                        "Datos guardados" + e.getMessage()
+                ).setVisible(true);
+        } finally {
+            try {
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
@@ -292,44 +372,77 @@ public class formuProduccion extends javax.swing.JDialog {
     private com.toedter.calendar.JDateChooser txtfinal;
     private com.toedter.calendar.JDateChooser txtinicio;
     // End of variables declaration//GEN-END:variables
+private int obtenerIdDetallePedido(Connection con, String nombrePedido) throws SQLException {
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            String sql = "SELECT dp.iddetalle_pedido "
+                    + "FROM detalle_pedido dp "
+                    + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
+                    + "WHERE p.nombre = ?";
+
+            ps = con.prepareStatement(sql);
+            ps.setString(1, nombrePedido);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return rs.getInt("iddetalle_pedido");
+            }
+            return -1; // Si no encuentra el pedido
+        } finally {
+            if (rs != null) {
+                rs.close();
+            }
+            if (ps != null) {
+                ps.close();
+            }
+        }
+    }
 
     private void cargarNombresPedidos() {
-    Connection con = null;
-    PreparedStatement ps = null;
-    java.sql.ResultSet rs = null;
-    
-    try {
-        con = Conexion.getConnection();
-        String sql = "SELECT nombre FROM pedido ORDER BY nombre";
-        ps = con.prepareStatement(sql);
-        rs = ps.executeQuery();
-        
-        // Limpiar y añadir opción por defecto
-        BoxNombreP.removeAllItems();
-        BoxNombreP.addItem("Seleccionar");
-        
-        // Llenar el comboBox con los nombres
-        while (rs.next()) {
-            BoxNombreP.addItem(rs.getString("nombre"));
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al cargar pedidos: " + e.getMessage(), 
-            "Error", JOptionPane.ERROR_MESSAGE);
-    } finally {
+        Connection con = null;
+        PreparedStatement ps = null;
+        java.sql.ResultSet rs = null;
+
         try {
-            if (rs != null) rs.close();
-            if (ps != null) ps.close();
-            if (con != null) con.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
+            con = Conexion.getConnection();
+            String sql = "SELECT nombre FROM pedido ORDER BY nombre";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            // Limpiar y añadir opción por defecto
+            BoxNombreP.removeAllItems();
+            BoxNombreP.addItem("Seleccionar");
+
+            // Llenar el comboBox con los nombres
+            while (rs.next()) {
+                BoxNombreP.addItem(rs.getString("nombre"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar pedidos: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
     }
-}
+
     @Override
-public void setVisible(boolean visible) {
-    if (visible) {
-        cargarNombresPedidos();
+    public void setVisible(boolean visible) {
+        if (visible) {
+            cargarNombresPedidos();
+        }
+        super.setVisible(visible);
     }
-    super.setVisible(visible);
-}
 }

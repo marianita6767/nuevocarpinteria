@@ -27,34 +27,39 @@ public class DetallePedido extends javax.swing.JPanel {
         initComponents();
         cargarDatosPedido();
     }
-private void cargarDatosPedido() {
+
+    private void cargarDatosPedido() {
         try (Connection con = new Conexion().getConnection()) {
-            String sql = "SELECT p.nombre, p.fecha_inicio, p.fecha_fin, p.estado, "
-                       + "dp.cantidad, dp.dimensiones "
-                       + "FROM produccion p "
-                       + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
-                       + "WHERE p.id_produccion = ?";
-            
+            String sql = "SELECT pe.nombre, p.fecha_inicio, p.fecha_fin, p.estado, "
+                    + "dp.cantidad, dp.dimensiones, dp.descripcion "
+                    + "FROM produccion p "
+                    + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
+                    + "JOIN pedido pe ON dp.pedido_id_pedido = pe.id_pedido "
+                    + "WHERE p.id_produccion = ?";
+
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, idProduccion);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        jLabel1.setText(rs.getString("nombre"));
+                        nombre.setText(rs.getString("nombre"));
                         fecha_ini.setText(rs.getString("fecha_inicio"));
                         fecha_fin.setText(rs.getString("fecha_fin"));
                         estado.setText(rs.getString("estado"));
-                        cantidad.setText(rs.getString("cantidad"));
-                        cantidad1.setText(rs.getString("cantidad"));
+                        cantidad.setText(String.valueOf(rs.getInt("cantidad")));
+                        cantidad1.setText(String.valueOf(rs.getInt("cantidad")));
                         dimensiones.setText(rs.getString("dimensiones"));
+                        // Si necesitas mostrar la descripción también
+                        // descripcionLabel.setText(rs.getString("descripcion"));
                     }
                 }
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
-                "Error al cargar detalles del pedido: " + e.getMessage(),
-                "Error", JOptionPane.ERROR_MESSAGE);
+                    "Error al cargar detalles del pedido: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -74,20 +79,21 @@ private void cargarDatosPedido() {
         jLabel7 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
+        nombre = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel13 = new javax.swing.JLabel();
         jLabel14 = new javax.swing.JLabel();
         cantidad1 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
 
         jPanel2.setBackground(new java.awt.Color(234, 234, 234));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel1.setText("Nombre");
+        jLabel1.setText("Nombre:");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, -1, -1));
 
         fecha_ini.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -140,10 +146,10 @@ private void cargarDatosPedido() {
 
         jPanel2.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 700, 2));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Fecha de inicio: ");
-        jPanel2.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+        nombre.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        nombre.setForeground(new java.awt.Color(0, 0, 0));
+        nombre.setText("Nombre");
+        jPanel2.add(nombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, -1));
 
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
@@ -175,6 +181,11 @@ private void cargarDatosPedido() {
         cantidad1.setText("cantidad");
         jPanel2.add(cantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, -1, -1));
 
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel15.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel15.setText("Fecha de inicio: ");
+        jPanel2.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 80, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,15 +207,16 @@ private void cargarDatosPedido() {
     private javax.swing.JLabel fecha_fin;
     private javax.swing.JLabel fecha_ini;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel nombre;
     // End of variables declaration//GEN-END:variables
 }

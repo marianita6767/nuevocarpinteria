@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -37,7 +38,7 @@ public final class Produccion extends javax.swing.JPanel {
      * Creates new form produccionContenido
      */
     public Produccion(JFrame jFrame, boolean par) {
-        initComponents(); // Esto debe ir primero
+        initComponents();
 
         // Configuración básica de la tabla
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
@@ -49,18 +50,37 @@ public final class Produccion extends javax.swing.JPanel {
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
                 new String[]{"ID", "Nombre", "Fecha inicio", "Fecha Final", "Estado", "Detalle"}
-        );
+        ) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                return String.class; // Esto ayuda al centrado uniforme
+            }
+        };
         Tabla1.setModel(model);
-        Tabla1.setForeground(Color.BLACK);
-        // Configuración de colores
+
+        // Color del texto para todas las celdas
+        Color textColor = new Color(46, 49, 82);
+        Tabla1.setForeground(textColor);
+
+        // Configuración de colores de selección
         Color colorSeleccion = new Color(109, 160, 221);
         Tabla1.setSelectionBackground(colorSeleccion);
-        Color setSelectionForeground = new Color(109, 160, 221);
+        Tabla1.setSelectionForeground(Color.WHITE); // Color del texto cuando está seleccionado
 
-        // Configura el renderizador para la columna de estado
+        // Centrar todo el contenido de la tabla
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment(JLabel.CENTER);
+        centerRenderer.setForeground(textColor);
+
+        // Aplicar el renderizador centrado a todas las columnas
+        for (int i = 0; i < Tabla1.getColumnCount(); i++) {
+            Tabla1.getColumnModel().getColumn(i).setCellRenderer(centerRenderer);
+        }
+
+        // Configura el renderizador especial para la columna de estado (sobrescribe el general)
         Tabla1.getColumnModel().getColumn(4).setCellRenderer(new EstadoTableCellRenderer());
 
-        // Configura el renderizador para la columna "Ver"
+        // Configura el renderizador especial para la columna "Ver" (sobrescribe el general)
         Tabla1.getColumnModel().getColumn(5).setCellRenderer(new VerTableCellRenderer());
 
         // Configura el buscador
@@ -68,16 +88,23 @@ public final class Produccion extends javax.swing.JPanel {
 
         // Carga los datos
         cargarTablaProduccion();
-
     }
-// Renderizador para la columna de estado
 
+// Renderizador para la columna de estado
     private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
+
+        public EstadoTableCellRenderer() {
+            setHorizontalAlignment(JLabel.CENTER); // Centrar el texto
+        }
 
         @Override
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
+            // Llamar al método padre primero
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            // Configurar el color del texto 
+            c.setForeground(new Color(46, 49, 82));
 
             if (!isSelected) {
                 String estado = (String) value;
@@ -123,10 +150,10 @@ public final class Produccion extends javax.swing.JPanel {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
-        btnEliminar = new rojeru_san.RSButtonRiple();
-        btnGuardar = new rojeru_san.RSButtonRiple();
-        btnNuevoProduc = new rojeru_san.RSButtonRiple();
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
+        btnEditar = new RSMaterialComponent.RSButtonShape();
+        btnNuevo = new RSMaterialComponent.RSButtonShape();
+        btnElimi = new RSMaterialComponent.RSButtonShape();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(1250, 630));
@@ -161,39 +188,6 @@ public final class Produccion extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 80, 1210, 490));
 
-        btnEliminar.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
-        btnEliminar.setText(" Eliminar");
-        btnEliminar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 20, 130, 40));
-
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
-        btnGuardar.setText("Editar");
-        btnGuardar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, 130, 40));
-
-        btnNuevoProduc.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
-        btnNuevoProduc.setText(" Nuevo");
-        btnNuevoProduc.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnNuevoProduc.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoProducActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btnNuevoProduc, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 130, 40));
-
         txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
         txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
@@ -207,42 +201,117 @@ public final class Produccion extends javax.swing.JPanel {
         });
         jPanel1.add(txtbuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 430, 40));
 
+        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
+        btnEditar.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
+        btnEditar.setText("   Editar");
+        btnEditar.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEditar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnEditar.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(950, 20, 120, 40));
+
+        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (1).png"))); // NOI18N
+        btnNuevo.setText("  Nuevo");
+        btnNuevo.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnNuevo.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnNuevo.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(820, 20, 120, 40));
+
+        btnElimi.setBackground(new java.awt.Color(46, 49, 82));
+        btnElimi.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnElimi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnElimi.setText(" Eliminar");
+        btnElimi.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnElimi.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnElimi.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnElimi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnElimiActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnElimi, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 20, 120, 40));
+
         add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
     }// </editor-fold>//GEN-END:initComponents
 
-    private void btnNuevoProducActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProducActionPerformed
-        formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        cargarTablaProduccion();
+    private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
+        filtrarTabla();
+    }//GEN-LAST:event_txtbuscarActionPerformed
 
-    }//GEN-LAST:event_btnNuevoProducActionPerformed
+    private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
+        int column = Tabla1.columnAtPoint(evt.getPoint());
+        int row = Tabla1.rowAtPoint(evt.getPoint());
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        if (column == 5) { // Columna "Ver"
+            // Obtener datos de la fila
+            // Obtener el ID de producción de la fila clickeada
+            int idProduccion = (int) Tabla1.getValueAt(row, 0);
+
+            String nombre = (String) Tabla1.getValueAt(row, 1);
+            String fechaInicio = (String) Tabla1.getValueAt(row, 2);
+            String fechaFin = (String) Tabla1.getValueAt(row, 3);
+            String estado = (String) Tabla1.getValueAt(row, 4);
+
+            // Crear y mostrar diálogo
+            DetalleProduccionProducto dialog = new DetalleProduccionProducto(
+                    new javax.swing.JFrame(),
+                    true,
+                    idProduccion,
+                    nombre,
+                    fechaInicio,
+                    fechaFin,
+                    estado
+            );
+            dialog.setLocationRelativeTo(null);
+            dialog.setVisible(true);
+
+        }
+    }//GEN-LAST:event_Tabla1MouseClicked
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         EditProduccion dialog = new EditProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
         cargarTablaProduccion();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+    }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        // 1. Obtener filas seleccionadas
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        cargarTablaProduccion();      
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
+// 1. Obtener filas seleccionadas
         int[] selectedRows = Tabla1.getSelectedRows();
 
         // 2. Validar si hay filas seleccionadas
         if (selectedRows.length == 0) {
             JOptionPane.showMessageDialog(this,
-                    "Por favor seleccione al menos una fila para eliminar",
-                    "Advertencia",
-                    JOptionPane.WARNING_MESSAGE);
+                "Por favor seleccione al menos una fila para eliminar",
+                "Advertencia",
+                JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         // 3. Mostrar confirmación
         int confirm = JOptionPane.showConfirmDialog(this,
-                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
-                "Confirmar eliminación",
-                JOptionPane.YES_NO_OPTION);
+            "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+            "Confirmar eliminación",
+            JOptionPane.YES_NO_OPTION);
 
         // 4. Si el usuario no confirma, salir
         if (confirm != JOptionPane.YES_OPTION) {
@@ -267,58 +336,24 @@ public final class Produccion extends javax.swing.JPanel {
             }
 
             JOptionPane.showMessageDialog(this,
-                    "Registros eliminados correctamente",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
+                "Registros eliminados correctamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
-                    "Error al eliminar: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-
-
-    }//GEN-LAST:event_btnEliminarActionPerformed
-
-    private void txtbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtbuscarActionPerformed
-        filtrarTabla();
-    }//GEN-LAST:event_txtbuscarActionPerformed
-
-    private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-        int column = Tabla1.columnAtPoint(evt.getPoint());
-        int row = Tabla1.rowAtPoint(evt.getPoint());
-
-        if (column == 5) { // Columna "Ver"
-            // Obtener datos de la fila
-            int idProduccion = (int) Tabla1.getValueAt(row, 0);
-            String nombre = (String) Tabla1.getValueAt(row, 1);
-            String fechaInicio = (String) Tabla1.getValueAt(row, 2);
-            String fechaFin = (String) Tabla1.getValueAt(row, 3);
-            String estado = (String) Tabla1.getValueAt(row, 4);
-
-            // Crear y mostrar diálogo
-            DetalleProduccionProducto dialog = new DetalleProduccionProducto(
-                    new javax.swing.JFrame(),
-                    true,
-                    idProduccion,
-                    nombre,
-                    fechaInicio,
-                    fechaFin,
-                    estado
-            );
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-         
-        }
-    }//GEN-LAST:event_Tabla1MouseClicked
+                "Error al eliminar: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        } 
+    }//GEN-LAST:event_btnElimiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
-    private rojeru_san.RSButtonRiple btnEliminar;
-    private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private RSMaterialComponent.RSButtonShape btnEditar;
+    private RSMaterialComponent.RSButtonShape btnElimi;
+    private RSMaterialComponent.RSButtonShape btnNuevo;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
