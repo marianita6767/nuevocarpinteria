@@ -1,137 +1,176 @@
 package controlador;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
+import java.awt.Graphics2D;
 import modelo.Catalogocategoria;
 import modelo.Conexion;
+import java.sql.*;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 public class Ctrl_catalogocategoria {
-    
-    // Método para crear una nueva categoría
-    public boolean crearCategoria(Catalogocategoria categoria) {
-        String sql = "INSERT INTO categoriacatalogo(nombre) VALUES (?)";
+    private Connection con = null;
+
+    public Ctrl_catalogocategoria() {
+        con = Conexion.getConnection();
+    }
+
+    // Método para insertar una nueva categoría en la base de datos
+    public boolean insertarCategoria(Catalogocategoria categoria) {
+        String sql = "INSERT INTO categoriacatalogo(nombre, imagen) VALUES(?, ?)";
         
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement ps = con.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // Convertir la imagen a bytes para almacenarla en la base de datos
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BufferedImage bufferedImage = new BufferedImage(
+                categoria.getImagen().getWidth(null), 
+                categoria.getImagen().getHeight(null), 
+                BufferedImage.TYPE_INT_RGB
+            );
             
-            stmt.setString(1, categoria.getNombre());
+            Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.drawImage(categoria.getImagen(), 0, 0, null);
+            g2d.dispose();
             
-            int affectedRows = stmt.executeUpdate();
+            ImageIO.write(bufferedImage, "jpg", baos);
+            byte[] imagenBytes = baos.toByteArray();
             
-            if (affectedRows > 0) {
-                try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                    if (generatedKeys.next()) {
-                        categoria.setIdCategoria(generatedKeys.getInt(1));
+            ps.setString(1, categoria.getNombre());
+            ps.setBytes(2, imagenBytes);
+            
+            int filasAfectadas = ps.executeUpdate();
+            
+            if (filasAfectadas > 0) {
+                try (ResultSet rs = ps.getGeneratedKeys()) {
+                    if (rs.next()) {
+                        int idGenerado = rs.getInt(1);
+                        // Puedes usar el ID generado si lo necesitas
                     }
                 }
                 return true;
             }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al crear categoría: " + e.getMessage());
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al insertar categoría: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
-    
- 
-    
-    // Método para actualizar una categoría
+
+    // Método para actualizar una categoría existente
     public boolean actualizarCategoria(Catalogocategoria categoria) {
-        String sql = "UPDATE categoriacatalogo SET nombre = ? WHERE idCategoria = ?";
+        String sql = "UPDATE categoriacatalogo SET nombre = ?, imagen = ? WHERE idCategoria = ?";
         
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            // Convertir la imagen a bytes
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            BufferedImage bufferedImage = new BufferedImage(
+                categoria.getImagen().getWidth(null), 
+                categoria.getImagen().getHeight(null), 
+                BufferedImage.TYPE_INT_RGB
+            );
             
-            stmt.setString(1, categoria.getNombre());
-            stmt.setInt(2, categoria.getIdCategoria());
+            Graphics2D g2d = bufferedImage.createGraphics();
+            g2d.drawImage(categoria.getImagen(), 0, 0, null);
+            g2d.dispose();
             
-            return stmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al actualizar categoría: " + e.getMessage());
-            e.printStackTrace();
+            ImageIO.write(bufferedImage, "jpg", baos);
+            byte[] imagenBytes = baos.toByteArray();
+            
+            ps.setString(1, categoria.getNombre());
+            ps.setBytes(2, imagenBytes);
+            ps.setInt(3, categoria.getIdCategoria());
+            
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al actualizar categoría: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
-    
+
     // Método para eliminar una categoría
     public boolean eliminarCategoria(int idCategoria) {
         String sql = "DELETE FROM categoriacatalogo WHERE idCategoria = ?";
         
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql)) {
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idCategoria);
             
-            stmt.setInt(1, idCategoria);
-            return stmt.executeUpdate() > 0;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error al eliminar categoría: " + e.getMessage());
-            e.printStackTrace();
+            int filasAfectadas = ps.executeUpdate();
+            return filasAfectadas > 0;
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error al eliminar categoría: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
         return false;
     }
-    
- 
-    
+
     // Método para obtener todas las categorías
     public List<Catalogocategoria> obtenerTodasCategorias() {
         List<Catalogocategoria> categorias = new ArrayList<>();
+        String sql = "SELECT idCategoria, nombre, imagen FROM categoriacatalogo";
         
-        // USAR EL NOMBRE EXACTO DE LA COLUMNA QUE EXISTE EN TU BD
-        String sql = "SELECT idCategoria, nombre FROM categoriacatalogo ORDER BY nombre";
-        
-        try (Connection con = Conexion.getConnection();
-             PreparedStatement stmt = con.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
+        try (Statement stmt = con.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
             
             while (rs.next()) {
-                Catalogocategoria cat = new Catalogocategoria(
-                    rs.getInt("idCategoria"),  // Nombre exacto de columna
-                    rs.getString("nombre")     // Nombre exacto de columna
-                );
-                categorias.add(cat);
+                int id = rs.getInt("idCategoria");
+                String nombre = rs.getString("nombre");
+                
+                // Convertir bytes de la imagen a Image
+                byte[] imagenBytes = rs.getBytes("imagen");
+                Image imagen = null;
+                
+                if (imagenBytes != null) {
+                    ByteArrayInputStream bais = new ByteArrayInputStream(imagenBytes);
+                    imagen = ImageIO.read(bais);
+                }
+                
+                Catalogocategoria categoria = new Catalogocategoria(nombre, imagen);
+                categoria.setIdCategoria(id);
+                categorias.add(categoria);
             }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al cargar categorías. Verifica:\n"
-                + "1. Que la tabla 'categoria' existe\n"
-                + "2. Que las columnas 'idCategoria' y 'nombre' existen\n"
-                + "3. Detalle técnico: " + e.getMessage(),
-                "Error de base de datos", 
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener categorías: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
         }
         return categorias;
     }
-    
-    // Método para cargar categorías en ComboBox
-    public void cargarCategoriasEnCombo(RSMaterialComponent.RSComboBoxMaterial comboBox) {
-        try {
-            comboBox.removeAllItems();
-            comboBox.addItem(new Catalogocategoria(0, "Seleccione categoría"));
-            
-            List<Catalogocategoria> categorias = obtenerTodasCategorias();
-            
-            if (categorias.isEmpty()) {
-                JOptionPane.showMessageDialog(null, 
-                    "No se encontraron categorías registradas", 
-                    "Advertencia", 
-                    JOptionPane.WARNING_MESSAGE);
-            }
-            
-            for (Catalogocategoria cat : categorias) {
-                comboBox.addItem(cat);
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, 
-                "Error al cargar categorías: " + e.getMessage(),
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
+    // Método para obtener una categoría por ID
+    public Catalogocategoria obtenerCategoriaPorId(int idCategoria) {
+        String sql = "SELECT nombre, imagen FROM categoriacatalogo WHERE idCategoria = ?";
+        
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idCategoria);
+            
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String nombre = rs.getString("nombre");
+                    byte[] imagenBytes = rs.getBytes("imagen");
+                    Image imagen = null;
+                    
+                    if (imagenBytes != null) {
+                        ByteArrayInputStream bais = new ByteArrayInputStream(imagenBytes);
+                        imagen = ImageIO.read(bais);
+                    }
+                    
+                    Catalogocategoria categoria = new Catalogocategoria(nombre, imagen);
+                    categoria.setIdCategoria(idCategoria);
+                    return categoria;
+                }
+            }
+        } catch (SQLException | IOException e) {
+            JOptionPane.showMessageDialog(null, "Error al obtener categoría: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        return null;
+    }
 }

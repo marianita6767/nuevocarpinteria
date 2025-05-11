@@ -104,25 +104,6 @@ public class silla extends javax.swing.JPanel {
     private void AñadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AñadirActionPerformed
        
   
-    catalogoNuevo dialog = new catalogoNuevo(new javax.swing.JFrame(), true);
-    dialog.setLocationRelativeTo(null);
-    dialog.setVisible(true);
-    
-    if (dialog.productoguardado && dialog.producto != null) {
-        ctrl_productocatalogo controlador = new ctrl_productocatalogo();
-        
-        if (controlador.insertarProducto(dialog.producto)) {
-            // Agregar el producto al panel visual
-            agregarproducto(
-                dialog.producto,
-                dialog.producto.getNombre(),
-                dialog.producto.getCategoria()
-            );
-            JOptionPane.showMessageDialog(null, "Producto agregado exitosamente");
-        } else {
-            JOptionPane.showMessageDialog(null, "Error al guardar en la base de datos");
-        }
-    }
 
     }//GEN-LAST:event_AñadirActionPerformed
 
