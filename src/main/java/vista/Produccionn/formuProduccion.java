@@ -19,12 +19,13 @@ import modelo.Conexion;
 public class formuProduccion extends javax.swing.JDialog {
 
     /**
-     * Creates new form formuProduccion
+     * Creates new form formuProducacion
      */
     public formuProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
         super(parent, modal);
         setLocationRelativeTo(parent);
         initComponents();
+        cargarNombresPedidos();
     }
 
     public formuProduccion(java.awt.Frame parent, boolean modal) {
@@ -46,6 +47,12 @@ public class formuProduccion extends javax.swing.JDialog {
         Boxestado = new RSMaterialComponent.RSComboBoxMaterial();
         txtinicio = new com.toedter.calendar.JDateChooser();
         txtfinal = new com.toedter.calendar.JDateChooser();
+        jLabel2 = new javax.swing.JLabel();
+        txtdimen = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel3 = new javax.swing.JLabel();
+        txtcantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        jLabel4 = new javax.swing.JLabel();
+        BoxNombreP = new RSMaterialComponent.RSComboBoxMaterial();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -63,10 +70,11 @@ public class formuProduccion extends javax.swing.JDialog {
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
 
+        jLabel6.setBackground(new java.awt.Color(255, 255, 255));
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel6.setForeground(new java.awt.Color(0, 0, 0));
         jLabel6.setText("fecha final:");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 70, -1, -1));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 150, -1, -1));
 
         btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -78,17 +86,19 @@ public class formuProduccion extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 250, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 320, 140, -1));
 
+        jLabel9.setBackground(new java.awt.Color(255, 255, 255));
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Estado:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 140, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 220, -1, -1));
 
+        jLabel10.setBackground(new java.awt.Color(255, 255, 255));
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
         jLabel10.setText("fecha inicial:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 80, -1, -1));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
@@ -100,7 +110,7 @@ public class formuProduccion extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 250, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 320, 140, -1));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "finalizado" }));
@@ -110,18 +120,76 @@ public class formuProduccion extends javax.swing.JDialog {
                 BoxestadoActionPerformed(evt);
             }
         });
-        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, -1, -1));
+        jPanel1.add(Boxestado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 250, -1, -1));
 
         txtinicio.setBackground(new java.awt.Color(255, 255, 255));
         txtinicio.setForeground(new java.awt.Color(255, 255, 255));
         txtinicio.setDateFormatString("y-MM-d");
         txtinicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 200, 30));
+        jPanel1.add(txtinicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 110, 200, 30));
 
         txtfinal.setBackground(new java.awt.Color(255, 255, 255));
         txtfinal.setForeground(new java.awt.Color(255, 255, 255));
         txtfinal.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 100, 190, 30));
+        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 190, 30));
+
+        jLabel2.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel2.setText("Nombre:");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
+
+        txtdimen.setEditable(false);
+        txtdimen.setBackground(new java.awt.Color(255, 255, 255));
+        txtdimen.setForeground(new java.awt.Color(0, 0, 0));
+        txtdimen.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtdimen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtdimen.setPhColor(new java.awt.Color(0, 0, 0));
+        txtdimen.setPlaceholder("");
+        txtdimen.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtdimen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtdimenActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtdimen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 190, 30));
+
+        jLabel3.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel3.setText("Dimensiones:");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
+
+        txtcantidad.setEditable(false);
+        txtcantidad.setBackground(new java.awt.Color(255, 255, 255));
+        txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
+        txtcantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtcantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtcantidad.setPhColor(new java.awt.Color(0, 0, 0));
+        txtcantidad.setPlaceholder("");
+        txtcantidad.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtcantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcantidadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 190, 30));
+
+        jLabel4.setBackground(new java.awt.Color(255, 255, 255));
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel4.setText("Cantidad:");
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        BoxNombreP.setForeground(new java.awt.Color(102, 102, 102));
+        BoxNombreP.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar" }));
+        BoxNombreP.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        BoxNombreP.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxNombrePActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BoxNombreP, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -131,70 +199,14 @@ public class formuProduccion extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 349, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 389, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // 1. Validar campos
-        if (txtinicio.getDate() == null || txtfinal.getDate() == null
-                || Boxestado.getSelectedItem() == null || Boxestado.getSelectedIndex() == 0) {
-
-            new espacio_alerta((Frame) this.getParent(), true, "Error", "Todos los campos son obligatorios").setVisible(true);
-            return;
-        }
-
-        // 2. Validar fechas
-        Date fechaInicio = new Date(txtinicio.getDate().getTime());
-        Date fechaFin = new Date(txtfinal.getDate().getTime());
-        String estado = Boxestado.getSelectedItem().toString();
-
-        if (fechaFin.before(fechaInicio)) {
-            new Error_fecha((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
-            return;
-        }
-
-        // 3. Mostrar diálogo de confirmación (alertaa)
-        alertaa confirmDialog = new alertaa(
-                (Frame) this.getParent(),
-                true,
-                "Confirmar",
-                "¿Desea guardar los datos?"
-        );
-        confirmDialog.setVisible(true);
-
-        // 4. Procesar respuesta
-        if (confirmDialog.opcionConfirmada) { // Si eligió "Guardar"
-            try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO produccion (fecha_inicio, fecha_fin, estado) VALUES (?, ?, ?)")) {
-
-                ps.setDate(1, fechaInicio);
-                ps.setDate(2, fechaFin);
-                ps.setString(3, estado);
-                ps.executeUpdate();
-
-                // Mostrar diálogo de éxito (Datos_guardados)
-                Datos_guardados exitoDialog = new Datos_guardados(
-                        (Frame) this.getParent(),
-                        true,
-                        "Éxito",
-                        "Datos guardados correctamente"
-                );
-                exitoDialog.setLocationRelativeTo(null);
-                exitoDialog.setVisible(true);
-
-                // Cerrar el formulario de producción
-                this.dispose();
-            } catch (SQLException e) {
-                new Error_guardar((Frame) this.getParent(), true, "Error",
-                        "Error al guardar: " + e.getMessage()).setVisible(true);
-                e.printStackTrace();
-            }
-        } else { // Si eligió "Cancelar"
-            this.dispose(); // Cierra el formulario de producción
-        }
+        
         
     }//GEN-LAST:event_btnGuardarActionPerformed
 
@@ -206,6 +218,18 @@ public class formuProduccion extends javax.swing.JDialog {
     private void BoxestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxestadoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_BoxestadoActionPerformed
+
+    private void txtdimenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtdimenActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtdimenActionPerformed
+
+    private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcantidadActionPerformed
+
+    private void BoxNombrePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxNombrePActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoxNombrePActionPerformed
 
     /**
      * @param args the command line arguments
@@ -250,16 +274,62 @@ public class formuProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSComboBoxMaterial BoxNombreP;
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
     private rojeru_san.RSButtonRiple btnCancelar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private RSMaterialComponent.RSTextFieldMaterial txtcantidad;
+    private RSMaterialComponent.RSTextFieldMaterial txtdimen;
     private com.toedter.calendar.JDateChooser txtfinal;
     private com.toedter.calendar.JDateChooser txtinicio;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarNombresPedidos() {
+    Connection con = null;
+    PreparedStatement ps = null;
+    java.sql.ResultSet rs = null;
+    
+    try {
+        con = Conexion.getConnection();
+        String sql = "SELECT nombre FROM pedido ORDER BY nombre";
+        ps = con.prepareStatement(sql);
+        rs = ps.executeQuery();
+        
+        // Limpiar y añadir opción por defecto
+        BoxNombreP.removeAllItems();
+        BoxNombreP.addItem("Seleccionar");
+        
+        // Llenar el comboBox con los nombres
+        while (rs.next()) {
+            BoxNombreP.addItem(rs.getString("nombre"));
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar pedidos: " + e.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } finally {
+        try {
+            if (rs != null) rs.close();
+            if (ps != null) ps.close();
+            if (con != null) con.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+    }
+}
+    @Override
+public void setVisible(boolean visible) {
+    if (visible) {
+        cargarNombresPedidos();
+    }
+    super.setVisible(visible);
+}
 }
