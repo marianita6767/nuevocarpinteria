@@ -5,14 +5,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import modelo.Catalogoproducto;
 import javax.swing.JScrollPane;
 import java.awt.FlowLayout;
 import java.awt.Color;
 import java.awt.Image;
+import modelo.producto;
 
 public class Producto extends javax.swing.JPanel {
-    private List<Catalogoproducto> productos = new ArrayList<>();
+    private List<producto> productos = new ArrayList<>();
     private List<JCheckBox> checkBoxes = new ArrayList<>();
     private JScrollPane scrollPane;
     private JPanel panelPrincipal;
@@ -65,7 +65,7 @@ public class Producto extends javax.swing.JPanel {
         boton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
-    public void agregarProducto(Catalogoproducto producto) {
+    public void agregarProducto(producto producto) {
         productos.add(producto);
         actualizarPanelProductos();
     }
@@ -77,7 +77,7 @@ public class Producto extends javax.swing.JPanel {
 
         Color colorTarjeta = new Color(242, 242, 242);
 
-        for (Catalogoproducto prod : productos) {
+        for (producto prod : productos) {
             JPanel panelProducto = crearPanelProducto(prod, colorTarjeta);
             PProductos.add(panelProducto);
         }
@@ -87,7 +87,7 @@ public class Producto extends javax.swing.JPanel {
         scrollPane.getVerticalScrollBar().setValue(0);
     }
 
-    private JPanel crearPanelProducto(Catalogoproducto prod, Color colorTarjeta) {
+    private JPanel crearPanelProducto(producto prod, Color colorTarjeta) {
         JPanel panelProducto = new JPanel(new BorderLayout());
         panelProducto.setPreferredSize(new Dimension(200, 240));
         panelProducto.setBackground(colorTarjeta);
@@ -108,7 +108,7 @@ public class Producto extends javax.swing.JPanel {
         return panelProducto;
     }
 
-    private JPanel crearPanelSuperior(Catalogoproducto prod) {
+    private JPanel crearPanelSuperior(producto prod) {
         JPanel panelSuperior = new JPanel(new BorderLayout());
         panelSuperior.setOpaque(false);
 
@@ -129,7 +129,7 @@ public class Producto extends javax.swing.JPanel {
         return panelSuperior;
     }
 
-    private JButton crearBotonEditar(Catalogoproducto prod) {
+    private JButton crearBotonEditar(producto prod) {
         JButton btnEditar = new JButton();
         btnEditar.setIcon(new ImageIcon(getClass().getResource("/catalogo/pencil1.png")));
         btnEditar.setContentAreaFilled(false);
@@ -146,7 +146,7 @@ public class Producto extends javax.swing.JPanel {
         return btnEditar;
     }
 
-    private JPanel crearPanelImagen(Catalogoproducto prod) {
+    private JPanel crearPanelImagen(producto prod) {
         JPanel imagenContainer = new JPanel(new BorderLayout());
         imagenContainer.setOpaque(false);
 
@@ -161,14 +161,14 @@ public class Producto extends javax.swing.JPanel {
         return imagenContainer;
     }
 
-    private JLabel crearLabelNombre(Catalogoproducto prod) {
+    private JLabel crearLabelNombre(producto prod) {
         JLabel nombreLabel = new JLabel(prod.getNombre(), SwingConstants.CENTER);
         nombreLabel.setFont(new Font("Segoe UI Black", Font.BOLD, 18));
         nombreLabel.setForeground(Color.BLACK);
         return nombreLabel;
     }
 
-    private void abrirEditarProducto(Catalogoproducto producto) {
+    private void abrirEditarProducto(producto producto) {
         productoEditar dialog = new productoEditar(
             (JFrame)SwingUtilities.getWindowAncestor(this), 
             true, 
@@ -181,7 +181,7 @@ public class Producto extends javax.swing.JPanel {
         }
     }
 
-    public void actualizarProducto(Catalogoproducto productoActualizado) {
+    public void actualizarProducto(producto productoActualizado) {
         int index = productos.indexOf(productoActualizado);
         if (index != -1) {
             productos.set(index, productoActualizado);
@@ -193,8 +193,8 @@ public class Producto extends javax.swing.JPanel {
         productos.clear();
         
         // Aquí deberías implementar la carga real de productos desde tu fuente de datos
-        List<Catalogoproducto> todosProductos = obtenerTodosLosProductos();
-        for (Catalogoproducto producto : todosProductos) {
+        List<producto> todosProductos = obtenerTodosLosProductos();
+        for (producto producto : todosProductos) {
             if (producto.getIdCategoria() == idCategoria) {
                 productos.add(producto);
             }
@@ -203,7 +203,7 @@ public class Producto extends javax.swing.JPanel {
         actualizarPanelProductos();
     }
 
-    private List<Catalogoproducto> obtenerTodosLosProductos() {
+    private List<producto> obtenerTodosLosProductos() {
         // Implementa este método para obtener los productos de tu base de datos o almacenamiento
         return new ArrayList<>();
     }
@@ -284,7 +284,7 @@ public class Producto extends javax.swing.JPanel {
         dialog.setLocationRelativeTo(this);
         dialog.setVisible(true);
         
-        Catalogoproducto nuevoProducto = dialog.getProductoCreado();
+        producto nuevoProducto = dialog.getProductoCreado();
         if (nuevoProducto != null) {
             agregarProducto(nuevoProducto);
         }
@@ -293,11 +293,11 @@ public class Producto extends javax.swing.JPanel {
 
     private void EliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EliminarActionPerformed
      
-        List<Catalogoproducto> productosAEliminar = new ArrayList<>();
+        List<producto> productosAEliminar = new ArrayList<>();
     
         for (JCheckBox checkBox : checkBoxes) {
             if (checkBox.isSelected()) {
-                Catalogoproducto producto = (Catalogoproducto) checkBox.getClientProperty("producto");
+                producto producto = (producto) checkBox.getClientProperty("producto");
                 productosAEliminar.add(producto);
             }
         }
@@ -321,9 +321,9 @@ public class Producto extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_volverActionPerformed
 
-                      
+       //ol               
 
-                                  
+        //"                          
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
