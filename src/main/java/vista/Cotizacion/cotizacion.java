@@ -12,6 +12,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author ADSO
  */
+//guarda?
 public class cotizacion extends javax.swing.JPanel {
 
     private String clienteActual = "";
