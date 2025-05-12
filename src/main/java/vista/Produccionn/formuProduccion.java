@@ -132,7 +132,7 @@ public class formuProduccion extends javax.swing.JDialog {
         txtfinal.setBackground(new java.awt.Color(255, 255, 255));
         txtfinal.setForeground(new java.awt.Color(255, 255, 255));
         txtfinal.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 190, 30));
+        jPanel1.add(txtfinal, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 30));
 
         jLabel2.setBackground(new java.awt.Color(255, 255, 255));
         jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
@@ -140,7 +140,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jLabel2.setText("Nombre:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 80, -1, -1));
 
-        txtdimen.setBackground(new java.awt.Color(255, 255, 255));
         txtdimen.setForeground(new java.awt.Color(0, 0, 0));
         txtdimen.setColorMaterial(new java.awt.Color(0, 0, 0));
         txtdimen.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -152,7 +151,7 @@ public class formuProduccion extends javax.swing.JDialog {
                 txtdimenActionPerformed(evt);
             }
         });
-        jPanel1.add(txtdimen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 190, 30));
+        jPanel1.add(txtdimen, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, 200, 30));
 
         jLabel3.setBackground(new java.awt.Color(255, 255, 255));
         jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
@@ -160,7 +159,6 @@ public class formuProduccion extends javax.swing.JDialog {
         jLabel3.setText("Dimensiones:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 220, -1, -1));
 
-        txtcantidad.setBackground(new java.awt.Color(255, 255, 255));
         txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
         txtcantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
         txtcantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
@@ -172,7 +170,7 @@ public class formuProduccion extends javax.swing.JDialog {
                 txtcantidadActionPerformed(evt);
             }
         });
-        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 190, 30));
+        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, 200, 30));
 
         jLabel4.setBackground(new java.awt.Color(255, 255, 255));
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N

@@ -6,15 +6,12 @@ package vista.Produccionn;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Frame;
+import java.awt.Dimension;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -45,7 +42,12 @@ public final class Produccion extends javax.swing.JPanel {
         Tabla1.setCellSelectionEnabled(false);
         Tabla1.setRowSelectionAllowed(true);
         Tabla1.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
+        //lineas de la tabla
+        Tabla1.setShowGrid(true);
+        Tabla1.setGridColor(new Color(200, 200, 200));
+        Tabla1.setShowHorizontalLines(true);
+        Tabla1.setShowVerticalLines(true);
+        Tabla1.setIntercellSpacing(new Dimension(1, 1));
         // Configura el modelo de tabla correctamente
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
@@ -103,10 +105,15 @@ public final class Produccion extends javax.swing.JPanel {
             // Llamar al método padre primero
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 
-            // Configurar el color del texto 
-            c.setForeground(new Color(46, 49, 82));
+            if (isSelected) {
+                // Cuando está seleccionado, texto blanco y fondo de selección
+                c.setForeground(Color.WHITE);
+                c.setBackground(table.getSelectionBackground());
+            } else {
+                // Cuando no está seleccionado, mantener el color original del texto
+                c.setForeground(new Color(46, 49, 82));
 
-            if (!isSelected) {
+                // Aplicar colores de fondo según el estado
                 String estado = (String) value;
                 switch (estado) {
                     case "pendiente":
@@ -118,8 +125,12 @@ public final class Produccion extends javax.swing.JPanel {
                     case "finalizado":
                         c.setBackground(new Color(204, 255, 204));
                         break;
+                    default:
+                        c.setBackground(table.getBackground());
+                        break;
                 }
             }
+
             return c;
         }
     }
@@ -131,7 +142,7 @@ public final class Produccion extends javax.swing.JPanel {
         public Component getTableCellRendererComponent(JTable table, Object value,
                 boolean isSelected, boolean hasFocus, int row, int column) {
             Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
-            c.setForeground(isSelected ? Color.WHITE : Color.BLUE);
+            c.setForeground(isSelected ? Color.WHITE : Color.BLACK);
             setHorizontalAlignment(CENTER);
             setText("Ver");
             return c;
@@ -250,6 +261,74 @@ public final class Produccion extends javax.swing.JPanel {
         filtrarTabla();
     }//GEN-LAST:event_txtbuscarActionPerformed
 
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        EditProduccion dialog = new EditProduccion(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        cargarTablaProduccion();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true);
+        dialog.setLocationRelativeTo(null);
+        dialog.setVisible(true);
+        cargarTablaProduccion();
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
+// 1. Obtener filas seleccionadas
+        int[] selectedRows = Tabla1.getSelectedRows();
+
+        // 2. Validar si hay filas seleccionadas
+        if (selectedRows.length == 0) {
+            JOptionPane.showMessageDialog(this,
+                    "Por favor seleccione al menos una fila para eliminar",
+                    "Advertencia",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 3. Mostrar confirmación
+        int confirm = JOptionPane.showConfirmDialog(this,
+                "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
+                "Confirmar eliminación",
+                JOptionPane.YES_NO_OPTION);
+
+        // 4. Si el usuario no confirma, salir
+        if (confirm != JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        // 5. Eliminar registros
+        try (Connection con = new Conexion().getConnection()) {
+            String sql = "DELETE FROM produccion WHERE id_produccion = ?";
+            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+
+            // Eliminar en orden inverso para evitar problemas con los índices
+            for (int i = selectedRows.length - 1; i >= 0; i--) {
+                int row = selectedRows[i];
+                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
+
+                try (PreparedStatement ps = con.prepareStatement(sql)) {
+                    ps.setInt(1, id);
+                    ps.executeUpdate();
+                    model.removeRow(row); // Eliminar de la tabla visual
+                }
+            }
+
+            JOptionPane.showMessageDialog(this,
+                    "Registros eliminados correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this,
+                    "Error al eliminar: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnElimiActionPerformed
+
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
         int column = Tabla1.columnAtPoint(evt.getPoint());
         int row = Tabla1.rowAtPoint(evt.getPoint());
@@ -279,74 +358,6 @@ public final class Produccion extends javax.swing.JPanel {
 
         }
     }//GEN-LAST:event_Tabla1MouseClicked
-
-    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        EditProduccion dialog = new EditProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        cargarTablaProduccion();
-    }//GEN-LAST:event_btnEditarActionPerformed
-
-    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-formuProduccion dialog = new formuProduccion(new javax.swing.JFrame(), true);
-        dialog.setLocationRelativeTo(null);
-        dialog.setVisible(true);
-        cargarTablaProduccion();      
-    }//GEN-LAST:event_btnNuevoActionPerformed
-
-    private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
-// 1. Obtener filas seleccionadas
-        int[] selectedRows = Tabla1.getSelectedRows();
-
-        // 2. Validar si hay filas seleccionadas
-        if (selectedRows.length == 0) {
-            JOptionPane.showMessageDialog(this,
-                "Por favor seleccione al menos una fila para eliminar",
-                "Advertencia",
-                JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // 3. Mostrar confirmación
-        int confirm = JOptionPane.showConfirmDialog(this,
-            "¿Está seguro que desea eliminar los " + selectedRows.length + " registros seleccionados?",
-            "Confirmar eliminación",
-            JOptionPane.YES_NO_OPTION);
-
-        // 4. Si el usuario no confirma, salir
-        if (confirm != JOptionPane.YES_OPTION) {
-            return;
-        }
-
-        // 5. Eliminar registros
-        try (Connection con = new Conexion().getConnection()) {
-            String sql = "DELETE FROM produccion WHERE id_produccion = ?";
-            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-
-            // Eliminar en orden inverso para evitar problemas con los índices
-            for (int i = selectedRows.length - 1; i >= 0; i--) {
-                int row = selectedRows[i];
-                int id = (int) model.getValueAt(row, 0); // ID está en la columna 0
-
-                try (PreparedStatement ps = con.prepareStatement(sql)) {
-                    ps.setInt(1, id);
-                    ps.executeUpdate();
-                    model.removeRow(row); // Eliminar de la tabla visual
-                }
-            }
-
-            JOptionPane.showMessageDialog(this,
-                "Registros eliminados correctamente",
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE);
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                "Error al eliminar: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-        } 
-    }//GEN-LAST:event_btnElimiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

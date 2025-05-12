@@ -15,17 +15,17 @@ import modelo.Conexion;
  *
  * @author pc
  */
-public class DetalleProduccion extends javax.swing.JDialog {
+public class FormuDetalleProduccion extends javax.swing.JDialog {
 
     private Produccion produccionPanel2;
 
-    public DetalleProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
+    public FormuDetalleProduccion(java.awt.Frame parent, boolean modal, Produccion produccionPanel) {
     super(parent, modal);
     initComponents();
     setLocationRelativeTo(parent); 
 }
 
-    public DetalleProduccion(java.awt.Frame parent, boolean modal) {
+    public FormuDetalleProduccion(java.awt.Frame parent, boolean modal) {
         this(parent, modal, null);  // Llama al nuevo constructor con null
     }
 
@@ -248,20 +248,21 @@ public class DetalleProduccion extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuDetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuDetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuDetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuDetalleProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                DetalleProduccion dialog = new DetalleProduccion(new javax.swing.JFrame(), true);
+                FormuDetalleProduccion dialog = new FormuDetalleProduccion(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

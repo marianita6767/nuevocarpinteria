@@ -5,31 +5,36 @@
 package vista.Produccionn;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Pattern;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
+import modelo.Conexion;
 
 /**
  *
  * @author pc
  */
-public class ProduccionContEtapa extends javax.swing.JPanel {
+public final class ProduccionContEtapa extends javax.swing.JPanel {
 
     private final int idProduccion;
 
     /**
      * Creates new form ProduccionContDetalle
+     *
+     * @param idProduccion
      */
     public ProduccionContEtapa(int idProduccion) {
         this.idProduccion = idProduccion;
@@ -39,7 +44,7 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Nombre", "Cantidad", "Fecha inicio", "fecha final","Estado","Materiales","Asignado"}
+                new String[]{"Nombre", "Fecha inicio", "Fecha final", "Estado", "Materiales", "Asignado"}
         ));
 
         Tabla1.setCellSelectionEnabled(false);
@@ -54,23 +59,70 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
 
         Tabla1.setSelectionBackground(colorSeleccion);
         Tabla1.setSelectionForeground(colorTexto);
-        cargarTablaDetalle();    // Carga Tabla1
+
+        Tabla1.getColumnModel().getColumn(3).setCellRenderer(new EstadoTableCellRenderer());
+
+        cargarTablaEtapa();    // Carga Tabla1
+    }
+    // Renderizador para la columna de estado
+
+    private class EstadoTableCellRenderer extends DefaultTableCellRenderer {
+
+        public EstadoTableCellRenderer() {
+            setHorizontalAlignment(JLabel.CENTER); // Centrar el texto
+        }
+
+        @Override
+        public Component getTableCellRendererComponent(JTable table, Object value,
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            // Llamar al método padre primero
+            Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+
+            if (isSelected) {
+                // Cuando está seleccionado, texto blanco y fondo de selección
+                c.setForeground(Color.WHITE);
+                c.setBackground(table.getSelectionBackground());
+            } else {
+                // Cuando no está seleccionado, mantener el color original del texto
+                c.setForeground(new Color(46, 49, 82));
+
+                // Aplicar colores de fondo según el estado
+                String estado = (String) value;
+                switch (estado) {
+                    case "pendiente":
+                        c.setBackground(new Color(255, 204, 204));
+                        break;
+                    case "proceso":
+                        c.setBackground(new Color(255, 255, 153));
+                        break;
+                    case "finalizado":
+                        c.setBackground(new Color(204, 255, 204));
+                        break;
+                    default:
+                        c.setBackground(table.getBackground());
+                        break;
+                }
+            }
+
+            return c;
+        }
+
     }
 
     private void cargarEtapasProduccion() {
-        try (Connection con = new Conexion().getConnection()) {
+        try (Connection con = Conexion.getConnection()) {
             String sql = "SELECT e.id_etapa, e.etapa, e.fecha_inicio, e.fecha_fin, e.estado, "
-                        + "e.descripcion, e.responsable "
-                        + "FROM etapas_produccion e "
-                        + "WHERE e.id_produccion = ? "
-                        + "ORDER BY e.fecha_inicio";
-            
+                    + "e.descripcion, e.responsable "
+                    + "FROM etapas_produccion e "
+                    + "WHERE e.id_produccion = ? "
+                    + "ORDER BY e.fecha_inicio";
+
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, this.idProduccion);
                 try (ResultSet rs = ps.executeQuery()) {
                     DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
                     model.setRowCount(0);
-                    
+
                     while (rs.next()) {
                         model.addRow(new Object[]{
                             rs.getInt("id_etapa"),
@@ -85,9 +137,9 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
                 }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al cargar etapas de producción: " + e.getMessage(), 
-                "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar etapas de producción: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -103,16 +155,16 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
         txtbuscar = new RSMaterialComponent.RSTextFieldMaterialIcon();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
-        btnNuevoProduc1 = new rojeru_san.RSButtonRiple();
-        btnGuardar = new rojeru_san.RSButtonRiple();
-        btnEliminar1 = new rojeru_san.RSButtonRiple();
+        btnEditar = new RSMaterialComponent.RSButtonShape();
+        btnNuevo = new RSMaterialComponent.RSButtonShape();
+        btnElimi = new RSMaterialComponent.RSButtonShape();
 
-        setBackground(new java.awt.Color(204, 204, 204));
+        setBackground(new java.awt.Color(234, 234, 234));
         setMaximumSize(new java.awt.Dimension(1150, 510));
         setMinimumSize(new java.awt.Dimension(1150, 510));
         setPreferredSize(new java.awt.Dimension(1150, 510));
 
-        txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
+        txtbuscar.setBackground(new java.awt.Color(255, 255, 255));
         txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
         txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
@@ -136,33 +188,42 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setColorSecundaryText(new java.awt.Color(46, 49, 82));
         jScrollPane2.setViewportView(Tabla1);
 
-        btnNuevoProduc1.setBackground(new java.awt.Color(46, 49, 82));
-        btnNuevoProduc1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
-        btnNuevoProduc1.setText(" Nuevo");
-        btnNuevoProduc1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnNuevoProduc1.addActionListener(new java.awt.event.ActionListener() {
+        btnEditar.setBackground(new java.awt.Color(46, 49, 82));
+        btnEditar.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
+        btnEditar.setText("   Editar");
+        btnEditar.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnEditar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnEditar.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnNuevoProduc1ActionPerformed(evt);
+                btnEditarActionPerformed(evt);
             }
         });
 
-        btnGuardar.setBackground(new java.awt.Color(46, 49, 82));
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/pencil (1).png"))); // NOI18N
-        btnGuardar.setText("Editar");
-        btnGuardar.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevo.setBackground(new java.awt.Color(46, 49, 82));
+        btnNuevo.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnNuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (1).png"))); // NOI18N
+        btnNuevo.setText("  Nuevo");
+        btnNuevo.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnNuevo.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnNuevo.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnGuardarActionPerformed(evt);
+                btnNuevoActionPerformed(evt);
             }
         });
 
-        btnEliminar1.setBackground(new java.awt.Color(46, 49, 82));
-        btnEliminar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
-        btnEliminar1.setText(" Eliminar");
-        btnEliminar1.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
-        btnEliminar1.addActionListener(new java.awt.event.ActionListener() {
+        btnElimi.setBackground(new java.awt.Color(46, 49, 82));
+        btnElimi.setBorder(javax.swing.BorderFactory.createCompoundBorder());
+        btnElimi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/delete (1).png"))); // NOI18N
+        btnElimi.setText(" Eliminar");
+        btnElimi.setBackgroundHover(new java.awt.Color(67, 150, 209));
+        btnElimi.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
+        btnElimi.setForma(RSMaterialComponent.RSButtonShape.FORMA.ROUND);
+        btnElimi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnEliminar1ActionPerformed(evt);
+                btnElimiActionPerformed(evt);
             }
         });
 
@@ -171,30 +232,32 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 324, Short.MAX_VALUE)
-                        .addComponent(btnNuevoProduc1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(btnEliminar1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane2))
-                .addContainerGap())
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 310, Short.MAX_VALUE)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnNuevoProduc1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnEliminar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 514, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnElimi, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(51, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -203,21 +266,21 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
 
     }//GEN-LAST:event_txtbuscarActionPerformed
 
-    private void btnNuevoProduc1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoProduc1ActionPerformed
-        DetalleProduccion dialog = new DetalleProduccion(new javax.swing.JFrame(), true);
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        EditEtapaProduccion dialog = new EditEtapaProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        cargarTablaDetalle();
-    }//GEN-LAST:event_btnNuevoProduc1ActionPerformed
+        cargarTablaEtapa();
+    }//GEN-LAST:event_btnEditarActionPerformed
 
-    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        EditDetalleProduccion dialog = new EditDetalleProduccion(new javax.swing.JFrame(), true);
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        FormuEtapaProduccion dialog = new FormuEtapaProduccion(new javax.swing.JFrame(), true);
         dialog.setLocationRelativeTo(null);
         dialog.setVisible(true);
-        cargarTablaDetalle();
-    }//GEN-LAST:event_btnGuardarActionPerformed
+        cargarTablaEtapa();
+    }//GEN-LAST:event_btnNuevoActionPerformed
 
-    private void btnEliminar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminar1ActionPerformed
+    private void btnElimiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnElimiActionPerformed
         int[] selectedRows = Tabla1.getSelectedRows(); // Obtener todas las filas seleccionadas
 
         if (selectedRows.length == 0) {
@@ -242,7 +305,7 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
             return; // Si el usuario cancela, no hacer nada
         }
 
-        try (Connection con = new ProduccionContEtapa.Conexion().getConnection()) {
+        try (Connection con = Conexion.getConnection()) {
             // Desactivar auto-commit para manejar transacciones
             con.setAutoCommit(false);
 
@@ -292,50 +355,55 @@ public class ProduccionContEtapa extends javax.swing.JPanel {
                     JOptionPane.ERROR_MESSAGE
             );
         }
-    }//GEN-LAST:event_btnEliminar1ActionPerformed
+    }//GEN-LAST:event_btnElimiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSTableMetro Tabla1;
-    private rojeru_san.RSButtonRiple btnEliminar1;
-    private rojeru_san.RSButtonRiple btnGuardar;
-    private rojeru_san.RSButtonRiple btnNuevoProduc1;
+    private RSMaterialComponent.RSButtonShape btnEditar;
+    private RSMaterialComponent.RSButtonShape btnElimi;
+    private RSMaterialComponent.RSButtonShape btnNuevo;
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
     // End of variables declaration//GEN-END:variables
 
-    public class Conexion {
+    public void cargarTablaEtapa() {
+        try (Connection con = Conexion.getConnection()) {
+            String sql = "SELECT ep.idetapa_produccion, ep.nombre_etapa, "
+                    + "ep.fecha_inicio, ep.fecha_fin, ep.estado, "
+                    + "COALESCE((SELECT GROUP_CONCAT(u.nombre SEPARATOR ', ') "
+                    + "FROM asignada a "
+                    + "JOIN usuario u ON a.usuario_id_usuario = u.id_usuario "
+                    + "WHERE a.etapa_produccion_idetapa_produccion = ep.idetapa_produccion), 'Sin asignar') AS responsable "
+                    + "FROM etapa_produccion ep "
+                    + "WHERE ep.produccion_codigo = ? "
+                    + "ORDER BY ep.fecha_inicio";
 
-        public Connection getConnection() {
-            Connection con = null;
-            try {
-                String myBD = "jdbc:mysql://localhost:3306/carpinteriasistema?serverTimezone=UTC";
-                con = DriverManager.getConnection(myBD, "root", "");
-                System.out.println("Conexión exitosa.");
-            } catch (SQLException e) {
-                System.out.println("Error al conectar: " + e.getMessage());
-            }
-            return con;
-        }
-    }
+            try (PreparedStatement ps = con.prepareStatement(sql)) {
+                ps.setInt(1, this.idProduccion);
+                try (ResultSet rs = ps.executeQuery()) {
+                    DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
+                    model.setRowCount(0);
 
-    public void cargarTablaDetalle() {
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement("SELECT * FROM detalle_produccion"); ResultSet rs = ps.executeQuery()) {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-            DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
-            model.setRowCount(0);
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getInt("idetalle_produccion"),
-                    rs.getInt("cantidad"),
-                    rs.getString("dimensiones"),
-                    rs.getString("materiales")
-                });
+                    while (rs.next()) {
+                        model.addRow(new Object[]{
+                            rs.getString("nombre_etapa"),
+                            sdf.format(rs.getDate("fecha_inicio")),
+                            sdf.format(rs.getDate("fecha_fin")),
+                            rs.getString("estado"),
+                            "", // Columna de materiales
+                            rs.getString("responsable") // Nombre(s) del responsable
+                        });
+                    }
+                }
             }
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
+            JOptionPane.showMessageDialog(this,
+                    "Error al cargar etapas de producción: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 

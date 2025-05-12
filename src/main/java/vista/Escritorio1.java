@@ -160,6 +160,7 @@ private void actualizarIdMaximopedido() {
         usuario.setBackground(new java.awt.Color(29, 30, 51));
         usuario.setText("Usuarios");
         usuario.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        usuario.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         usuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 usuarioActionPerformed(evt);
@@ -174,7 +175,7 @@ private void actualizarIdMaximopedido() {
         jPanel4.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 250, 200, 130));
 
         rSComboBoxMaterial1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Notificaciones", " " }));
-        rSComboBoxMaterial1.setFont(new java.awt.Font("Berlin Sans FB Demi", 1, 18)); // NOI18N
+        rSComboBoxMaterial1.setFont(new java.awt.Font("Roboto Bold", 0, 18)); // NOI18N
         jPanel4.add(rSComboBoxMaterial1, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 60, 600, 60));
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 204));
@@ -192,6 +193,7 @@ private void actualizarIdMaximopedido() {
         proveedor.setBackground(new java.awt.Color(29, 30, 51));
         proveedor.setText("Proveedores");
         proveedor.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        proveedor.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         proveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 proveedorActionPerformed(evt);
@@ -207,6 +209,7 @@ private void actualizarIdMaximopedido() {
         pedidos.setBackground(new java.awt.Color(29, 30, 51));
         pedidos.setText("Pedidos");
         pedidos.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        pedidos.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         pedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 pedidosActionPerformed(evt);
@@ -226,6 +229,7 @@ private void actualizarIdMaximopedido() {
         cliente.setBackground(new java.awt.Color(29, 30, 51));
         cliente.setText("Clientes");
         cliente.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        cliente.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         cliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 clienteActionPerformed(evt);
@@ -245,6 +249,7 @@ private void actualizarIdMaximopedido() {
         stock.setBackground(new java.awt.Color(29, 30, 51));
         stock.setText("Stock");
         stock.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        stock.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         stock.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stockActionPerformed(evt);
@@ -265,6 +270,7 @@ private void actualizarIdMaximopedido() {
         produccion.setBackground(new java.awt.Color(29, 30, 51));
         produccion.setText("Produccion");
         produccion.setBackgroundHover(new java.awt.Color(29, 30, 31));
+        produccion.setFont(new java.awt.Font("Roboto Bold", 1, 18)); // NOI18N
         produccion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 produccionActionPerformed(evt);
