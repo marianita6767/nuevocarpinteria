@@ -56,7 +56,7 @@ public final class Ingresos extends javax.swing.JPanel {
             caja.getId_codigo(),
             caja.getFecha(),
             caja.getDescripcion(),
-            caja.getCategoria_idCategoria(),
+            caja.getCategoria(),
             caja.getMonto()
         });
     }
@@ -77,13 +77,14 @@ public final class Ingresos extends javax.swing.JPanel {
         btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
+        jLabel1 = new javax.swing.JLabel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(1250, 630));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
-        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setForeground(new java.awt.Color(0, 0, 0));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
         txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
         txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
@@ -135,13 +136,17 @@ public final class Ingresos extends javax.swing.JPanel {
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1160, 490));
 
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setText("Ingresos");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 1301, Short.MAX_VALUE)
             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1301, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1301, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,6 +253,7 @@ public final class Ingresos extends javax.swing.JPanel {
     private rojeru_san.RSButtonRiple btnEliminar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private RSMaterialComponent.RSTextFieldMaterialIcon txtbuscar;
