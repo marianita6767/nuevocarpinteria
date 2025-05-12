@@ -1,48 +1,69 @@
-
 package vista.catalogo;
 
-import java.awt.Image;
-import java.io.File;
-import javax.swing.ImageIcon;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import modelo.Catalogoproducto;
+import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
-/**
- *
- * @author buitr
- */
-public class catalogoNuevo extends javax.swing.JDialog {
+public class productoEditar extends javax.swing.JDialog {
+    private Catalogoproducto producto;
+    private boolean guardado = false;
+    private Image imagenTemporal;
 
-     private Catalogoproducto productoCreado;
-    
-public catalogoNuevo(java.awt.Frame parent, boolean modal) {
+    public productoEditar(java.awt.Frame parent, boolean modal, Catalogoproducto producto) {
         super(parent, modal);
+        this.producto = producto;
         initComponents();
-       
+        cargarDatosProducto();
+        setLocationRelativeTo(parent);
     }
-public Catalogoproducto getProductoCreado() {
-    return this.productoCreado; 
-}
 
-private Image obtenerImagenDelLabel() {
-    try {
-        if (lblImagen.getIcon() != null && lblImagen.getIcon() instanceof ImageIcon) {
-            return ((ImageIcon) lblImagen.getIcon()).getImage();
+    private void cargarDatosProducto() {
+        if (producto != null) {
+            txtNombre.setText(producto.getNombre());
+            txtColor.setText(producto.getColor());
+            txtMaterial.setText(producto.getMaterial());
+            txtProfundidad.setText(String.valueOf(producto.getProfundidad()));
+            txtAncho.setText(String.valueOf(producto.getAncho()));
+            txtAltura.setText(String.valueOf(producto.getAltura()));
+            
+            if (producto.getImagen() != null) {
+                imagenTemporal = producto.getImagen();
+                ImageIcon icon = new ImageIcon(imagenTemporal);
+                lblImagen.setIcon(icon);
+            }
         }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, 
-            "Error al obtener la imagen: " + e.getMessage(), 
-            "Error", 
-            JOptionPane.ERROR_MESSAGE);
     }
-    return null;
-}
- 
 
-
-
+    public Catalogoproducto getProductoEditado() {
+        return guardado ? producto : null;
+    }
+    
+     private boolean validarCampos() {
+        if (txtNombre.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío", "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        try {
+            Double.parseDouble(txtProfundidad.getText());
+            Double.parseDouble(txtAncho.getText());
+            Double.parseDouble(txtAltura.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, 
+                "Las dimensiones deben ser valores numéricos válidos", 
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
+     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -245,80 +266,70 @@ private Image obtenerImagenDelLabel() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSubirImagenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubirImagenActionPerformed
-       // Obtener dimensiones del lblImagen
-          JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setDialogTitle("Seleccionar imagen del producto");
-    
-    // Filtro para archivos de imagen
-    FileNameExtensionFilter filter = new FileNameExtensionFilter(
-        "Imágenes", "jpg", "jpeg", "png", "gif");
-    fileChooser.setFileFilter(filter);
-    
-    int resultado = fileChooser.showOpenDialog(this);
-    
-    if (resultado == JFileChooser.APPROVE_OPTION) {
-        try {
-            File archivo = fileChooser.getSelectedFile();
-            ImageIcon icono = new ImageIcon(archivo.getAbsolutePath());
-            
-            // Escalar la imagen para que se ajuste al label
-            Image imagen = icono.getImage().getScaledInstance(
-                lblImagen.getWidth(), 
-                lblImagen.getHeight(), 
-                Image.SCALE_SMOOTH);
-            
-            lblImagen.setIcon(new ImageIcon(imagen));
-            
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, 
-                "Error al cargar la imagen: " + e.getMessage(), 
-                "Error", 
-                JOptionPane.ERROR_MESSAGE);
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Seleccionar imagen");
+        fileChooser.setAcceptAllFileFilterUsed(false);
+        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Imágenes", "jpg", "png", "jpeg"));
+        
+        if (fileChooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            try {
+                File file = fileChooser.getSelectedFile();
+                BufferedImage bufferedImage = ImageIO.read(file);
+                
+                // Escalar la imagen para mostrarla en el label
+                Image imagenEscalada = bufferedImage.getScaledInstance(
+                    lblImagen.getWidth(), lblImagen.getHeight(), Image.SCALE_SMOOTH);
+                
+                ImageIcon icon = new ImageIcon(imagenEscalada);
+                lblImagen.setIcon(icon);
+                
+                // Guardar la imagen original para cuando se guarde
+                imagenTemporal = bufferedImage;
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, 
+                    "Error al cargar la imagen: " + ex.getMessage(), 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
-    }
-    
-    
     }//GEN-LAST:event_btnSubirImagenActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreActionPerformed
 
+    private void txtColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtColorActionPerformed
+
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-      
+
         dispose(); // Cierra la ventana emergente
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-       
-      try {
-        // Validación de campos
-        if(txtNombre.getText().isEmpty() || lblImagen.getIcon() == null) {
-            JOptionPane.showMessageDialog(this, "Complete todos los campos");
-            return;
-        }
-        
-        // Crear producto
-        this.productoCreado = new Catalogoproducto(
-            txtNombre.getText(),
-            txtColor.getText(),
-            txtMaterial.getText(),
-            Double.parseDouble(txtAncho.getText()),
-            Double.parseDouble(txtAltura.getText()),
-            Double.parseDouble(txtProfundidad.getText()),
-            ((ImageIcon)lblImagen.getIcon()).getImage(),
-            1 // idCategoria
-        );
-        
-        this.dispose();
-    } catch(Exception e) {
-        JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-    }
-    }//GEN-LAST:event_btnGuardarActionPerformed
 
-    private void txtColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtColorActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtColorActionPerformed
+     if (validarCampos()) {
+            try {
+                producto.setNombre(txtNombre.getText());
+                producto.setColor(txtColor.getText());
+                producto.setMaterial(txtMaterial.getText());
+                producto.setProfundidad(Double.parseDouble(txtProfundidad.getText()));
+                producto.setAncho(Double.parseDouble(txtAncho.getText()));
+                producto.setAltura(Double.parseDouble(txtAltura.getText()));
+                
+                if (imagenTemporal != null) {
+                    producto.setImagen(imagenTemporal);
+                }
+                
+                guardado = true;
+                dispose();
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, 
+                    "Por favor ingrese valores numéricos válidos para las dimensiones", 
+                    "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void txtAlturaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlturaActionPerformed
         // TODO add your handling code here:
@@ -339,44 +350,7 @@ private Image obtenerImagenDelLabel() {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(catalogoNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(catalogoNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(catalogoNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(catalogoNuevo.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                catalogoNuevo dialog = new catalogoNuevo(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+  
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private rojeru_san.RSButtonRiple btnCancelar;
