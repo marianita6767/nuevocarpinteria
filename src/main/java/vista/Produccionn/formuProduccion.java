@@ -27,7 +27,13 @@ public class formuProduccion extends javax.swing.JDialog {
         setLocationRelativeTo(parent);
         initComponents();
         cargarNombresPedidos();
+
+        txtcantidad.setEnabled(false);
+        txtdimen.setEnabled(false);
     }
+
+    
+
 
     public formuProduccion(java.awt.Frame parent, boolean modal) {
         this(parent, modal, null);  // Llama al nuevo constructor con null
@@ -234,7 +240,7 @@ public class formuProduccion extends javax.swing.JDialog {
             int idDetallePedido = obtenerIdDetallePedido(con, BoxNombreP.getSelectedItem().toString());
             if (idDetallePedido == -1) {
                 new Error_id_((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
-            return;
+                return;
             }
 
             // 2. Insertar en la tabla produccion
@@ -252,7 +258,7 @@ public class formuProduccion extends javax.swing.JDialog {
             if (filasAfectadas > 0) {
                 new Datos_guardados(
                         (Frame) this.getParent(),
-                        true, 
+                        true,
                         "exito",
                         "Datos guardados"
                 ).setVisible(true);
@@ -260,18 +266,18 @@ public class formuProduccion extends javax.swing.JDialog {
             } else {
                 new DatosActualizados(
                         (Frame) this.getParent(),
-                        true, 
+                        true,
                         "exito",
                         "Datos guardados"
                 ).setVisible(true);
             }
         } catch (SQLException e) {
             new Error_guardar(
-                        (Frame) this.getParent(),
-                        true, 
-                        "exito",
-                        "Datos guardados" + e.getMessage()
-                ).setVisible(true);
+                    (Frame) this.getParent(),
+                    true,
+                    "exito",
+                    "Datos guardados" + e.getMessage()
+            ).setVisible(true);
         } finally {
             try {
                 if (ps != null) {
@@ -306,7 +312,53 @@ public class formuProduccion extends javax.swing.JDialog {
     }//GEN-LAST:event_txtcantidadActionPerformed
 
     private void BoxNombrePActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxNombrePActionPerformed
-        // TODO add your handling code here:
+        if (BoxNombreP.getSelectedIndex() <= 0) {
+            txtcantidad.setEnabled(false);
+            txtdimen.setEnabled(false);
+            return;
+        }
+        
+        txtcantidad.setEnabled(true);
+        txtdimen.setEnabled(true);
+        
+
+        Item selectedItem = (Item) BoxNombreP.getSelectedItem();
+        int idDetallePedido = selectedItem.getId();
+
+        Connection con = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            con = Conexion.getConnection();
+            String sql = "SELECT cantidad, dimensiones FROM detalle_pedido WHERE iddetalle_pedido = ?";
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idDetallePedido);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                txtcantidad.setText(String.valueOf(rs.getInt("cantidad")));
+                txtdimen.setText(rs.getString("dimensiones"));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al cargar detalles: " + e.getMessage(),
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+
     }//GEN-LAST:event_BoxNombrePActionPerformed
 
     /**
@@ -400,21 +452,20 @@ private int obtenerIdDetallePedido(Connection con, String nombrePedido) throws S
     private void cargarNombresPedidos() {
         Connection con = null;
         PreparedStatement ps = null;
-        java.sql.ResultSet rs = null;
+        ResultSet rs = null;
 
         try {
             con = Conexion.getConnection();
-            String sql = "SELECT nombre FROM pedido ORDER BY nombre";
+            String sql = "SELECT iddetalle_pedido, descripcion FROM detalle_pedido ORDER BY descripcion";
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            // Limpiar y añadir opción por defecto
             BoxNombreP.removeAllItems();
             BoxNombreP.addItem("Seleccionar");
 
-            // Llenar el comboBox con los nombres
             while (rs.next()) {
-                BoxNombreP.addItem(rs.getString("nombre"));
+                // Almacenamos el ID como el "valor" del item y la descripción como texto visible
+                BoxNombreP.addItem(new Item(rs.getInt("iddetalle_pedido"), rs.getString("descripcion")));
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar pedidos: " + e.getMessage(),
@@ -433,6 +484,26 @@ private int obtenerIdDetallePedido(Connection con, String nombrePedido) throws S
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
+        }
+    }
+
+    private class Item {
+
+        private int id;
+        private String descripcion;
+
+        public Item(int id, String descripcion) {
+            this.id = id;
+            this.descripcion = descripcion;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        @Override
+        public String toString() {
+            return descripcion;
         }
     }
 
