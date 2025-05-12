@@ -18,12 +18,12 @@ import modelo.Conexion;
  *
  * @author pc
  */
-public class EtapaProduccion extends javax.swing.JDialog {
+public class FormuEtapaProduccion extends javax.swing.JDialog {
 
     /**
      * Creates new form EtapaProduccion
      */
-    public EtapaProduccion(Frame parent, boolean modal) {
+    public FormuEtapaProduccion(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         setLocationRelativeTo(parent);
@@ -226,7 +226,7 @@ public class EtapaProduccion extends javax.swing.JDialog {
             errorDialog.setLocationRelativeTo(null);
             errorDialog.setVisible(true);
 
-            Logger.getLogger(EtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -297,7 +297,7 @@ public class EtapaProduccion extends javax.swing.JDialog {
                 }
             }
         } catch (Exception ex) {
-            java.util.logging.Logger.getLogger(EtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(FormuEtapaProduccion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
 
         /* Create and display the dialog */
@@ -305,7 +305,7 @@ public class EtapaProduccion extends javax.swing.JDialog {
             private Produccion produccionPanel;
 
             public void run() {
-                EtapaProduccion dialog = new EtapaProduccion(new javax.swing.JFrame(), true);
+                FormuEtapaProduccion dialog = new FormuEtapaProduccion(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
