@@ -66,7 +66,7 @@ public class formuIngresos extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Produccion");
+        jLabel1.setText("Ingresos");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
@@ -79,15 +79,15 @@ public class formuIngresos extends javax.swing.JDialog {
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 400, 140, -1));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 380, 140, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel9.setText("Detalle de Ingreso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, 160, 30));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel10.setText("Fecha Pago:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 120, 30));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Volver");
@@ -97,21 +97,29 @@ public class formuIngresos extends javax.swing.JDialog {
                 btnCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 140, -1));
+        jPanel1.add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 380, 140, -1));
 
         txtPago.setBackground(new java.awt.Color(255, 255, 255));
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
         txtPago.setDateFormatString("y-MM-d");
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
-        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, -1));
+        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 190, 30));
 
+        txtCantidadnuevo.setForeground(new java.awt.Color(0, 0, 0));
+        txtCantidadnuevo.setPlaceholder("Ingrese Cantidad");
+        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, 420, -1));
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel2.setText("Cantidad a Ingresar:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 420, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 180, 30));
 
+        txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
+        txtDetallenuevo.setPlaceholder("Ingreso a Registrar");
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 230, 420, -1));
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel3.setText("Categoria");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 110, 30));
 
         comboCategoria.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte", "Domicilios y Logistica", "mantenimineto y Reparaciones", "Muebles", "Equipos o Maquinaria", "Otros" }));
         comboCategoria.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -121,13 +129,13 @@ public class formuIngresos extends javax.swing.JDialog {
                 comboCategoriaActionPerformed(evt);
             }
         });
-        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 420, 30));
+        jPanel1.add(comboCategoria, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 420, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,7 +167,7 @@ public class formuIngresos extends javax.swing.JDialog {
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
             String descripcion = txtDetallenuevo.getText();
             double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String Categoria_idCategoria = comboCategoria.getSelectedItem().toString();
+            String categoria = comboCategoria.getSelectedItem().toString();
 
             // Validar categoría seleccionada
             if (comboCategoria.getSelectedIndex() == 0) {
@@ -173,7 +181,7 @@ public class formuIngresos extends javax.swing.JDialog {
                 monto,
                 "ingreso",
                 descripcion,
-                Categoria_idCategoria
+                categoria
             );
             
             if (exito) {
@@ -198,15 +206,15 @@ public class formuIngresos extends javax.swing.JDialog {
     
 }
     }//GEN-LAST:event_btnGuardarActionPerformed
-   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String Categoria_idCategoria)throws SQLException{
-   String sql = "INSERT INTO caja (fecha, monto, descripcion, Categoria_idCategoria, movimiento) VALUES (?, ?, ?, ?, ?)";
+   private boolean insertarIngreso(String fecha,Double monto,String movimiento, String descripcion, String categoria)throws SQLException{
+   String sql = "INSERT INTO caja (fecha, monto, descripcion, categoria, movimiento) VALUES (?, ?, ?, ?, ?)";
    
     try (Connection con = new Conexion().getConnection(); 
          PreparedStatement ps = con.prepareStatement(sql)) {
         ps.setString(1, fecha);
         ps.setDouble(2, monto);
         ps.setString(3, descripcion);
-        ps.setString(4, Categoria_idCategoria);
+        ps.setString(4, categoria);
         ps.setString(5, "ingreso"); // Usamos el valor fijo "ingreso" aquí
         return ps.executeUpdate() > 0;
     }
@@ -298,7 +306,7 @@ public class formuIngresos extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private boolean insertarEtapa(Date fecha, double monto, String descripcion, String categoria) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto) VALUES (?, ?,?)";
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, categoria) VALUES (?, ?,?)";
 
         try (Connection con = Conexion.getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -308,7 +316,7 @@ public class formuIngresos extends javax.swing.JDialog {
 
             // Usar setDouble para valores numéricos
             ps.setDouble(3, monto);
-
+            ps.setString(4, categoria);
             int resultado = ps.executeUpdate();
             if (resultado > 0) {
                 mostrarMensaje("Registro guardado correctamente");

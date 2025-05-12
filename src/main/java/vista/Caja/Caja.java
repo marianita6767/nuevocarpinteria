@@ -59,7 +59,7 @@ public class Caja extends javax.swing.JPanel {
             .addGap(0, 590, Short.MAX_VALUE)
         );
 
-        add(panelP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 1240, 590));
+        add(panelP1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, 1240, 590));
 
         btnEgresos2.setBackground(new java.awt.Color(0, 0, 0));
         btnEgresos2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/wrench.png"))); // NOI18N

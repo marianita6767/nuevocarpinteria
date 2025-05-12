@@ -43,7 +43,7 @@ public class cotizacion extends javax.swing.JPanel {
         ) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Hacer que solo las columnas de acción sean editables
+                // seleccionar colimnas editables
                 return column == 5 || column == 6;
             }
         };
@@ -252,8 +252,6 @@ public class cotizacion extends javax.swing.JPanel {
     }//GEN-LAST:event_combox_UnidadActionPerformed
 
     private void txt_totalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_totalActionPerformed
-        // TODO add your handling code here:
-
 
     }//GEN-LAST:event_txt_totalActionPerformed
 
@@ -273,8 +271,8 @@ public class cotizacion extends javax.swing.JPanel {
             return;
         }
 
-        // Aquí iría el código para generar el PDF
-        // Puedes usar librerías como iText o Apache PDFBox
+        // Aquí iría el código para generar el PDF pero topdavia no he hecho suficiente invest.
+        // podria funcionar el Apache PDFBox :D
         JOptionPane.showMessageDialog(this,
                 "PDF generado exitosamente",
                 "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -310,7 +308,7 @@ public class cotizacion extends javax.swing.JPanel {
             txt_NombreCliente.setEnabled(false);
         }
 
-        // Obtener datos permanece igual...
+        // Obtener datos queda igual
         String producto = txtNombre6.getText().trim();
         String unidad = combox_Unidad.getSelectedItem().toString();
         String cantidadStr = txtNombre4.getText().trim();

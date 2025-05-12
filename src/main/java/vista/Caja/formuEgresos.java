@@ -61,7 +61,7 @@ public class formuEgresos extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Century751 BT", 1, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("Produccion");
+        jLabel1.setText("Egresos");
         jPanel2.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 520, 50));
@@ -76,13 +76,13 @@ public class formuEgresos extends javax.swing.JDialog {
         });
         jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 380, 140, -1));
 
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel9.setText("Detalle de Egreso:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 130, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 210, 150, -1));
 
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel10.setText("Fecha Pago:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, -1, -1));
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 110, -1));
 
         btnCancelar.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar.setText("Volver");
@@ -98,26 +98,29 @@ public class formuEgresos extends javax.swing.JDialog {
         txtPago.setForeground(new java.awt.Color(255, 255, 255));
         txtPago.setDateFormatString("y-MM-d");
         txtPago.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 190, 30));
+        jPanel1.add(txtPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 220, 30));
 
+        txtCantidadnuevo.setForeground(new java.awt.Color(0, 0, 0));
         txtCantidadnuevo.setPlaceholder("Ingrese cantidad de egreso");
         txtCantidadnuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtCantidadnuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 420, -1));
+        jPanel1.add(txtCantidadnuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 160, 420, 40));
 
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel2.setText("Cantidad del Egreso:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, 170, -1));
 
+        txtDetallenuevo.setForeground(new java.awt.Color(0, 0, 0));
         txtDetallenuevo.setPlaceholder("Ingrese detalles de egreso");
         txtDetallenuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtDetallenuevoActionPerformed(evt);
             }
         });
-        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 420, -1));
+        jPanel1.add(txtDetallenuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 240, 420, 40));
 
         cmbStock.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccione categoria:", "Servicios Publicos", "Compra de Productos e Insumos", "Arriendo", "Nómina", "Gastos Administrativos", "Mercadeo y Publicidad", "Transporte, Domicilios y Logistica", "mantenimineto y Reparaciones ", "Muebles, Equipos o Maquinaria", "Otros" }));
         cmbStock.setColorMaterial(new java.awt.Color(0, 0, 0));
@@ -127,16 +130,17 @@ public class formuEgresos extends javax.swing.JDialog {
                 cmbStockActionPerformed(evt);
             }
         });
-        jPanel1.add(cmbStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 330, 420, 30));
+        jPanel1.add(cmbStock, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 320, 420, 30));
 
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
         jLabel3.setText("Categoria");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, 90, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -154,10 +158,10 @@ public class formuEgresos extends javax.swing.JDialog {
             java.sql.Date fecha = new java.sql.Date(txtPago.getDate().getTime());
             String descripcion = txtDetallenuevo.getText();
             Double monto = Double.parseDouble(txtCantidadnuevo.getText().trim());
-            String Categoria_idCategoria = (String) cmbStock.getSelectedItem();
+            String categoria = (String) cmbStock.getSelectedItem();
 
             // Insertar en BD
-            if (insertarEtapa(fecha, descripcion,monto,Categoria_idCategoria)) {
+            if (insertarEtapa(fecha, descripcion,monto,categoria)) {
                 this.dispose();
 
             }
@@ -245,8 +249,8 @@ public class formuEgresos extends javax.swing.JDialog {
     private com.toedter.calendar.JDateChooser txtPago;
     // End of variables declaration//GEN-END:variables
 
-   private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto, String Categoria_idCategoria) throws SQLException {
-        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento,Categoria_idCategoria) VALUES (?, ?,?,'egreso')";
+   private boolean insertarEtapa(java.util.Date fecha, String descripcion, Double monto, String categoria) throws SQLException {
+        String sql = "INSERT INTO caja (fecha, descripcion, monto, movimiento,categoria) VALUES (?, ?,?,'egreso',?)";
 
          try (Connection con = Conexion.getConnection();
          PreparedStatement ps = con.prepareStatement(sql)) {
@@ -257,7 +261,7 @@ public class formuEgresos extends javax.swing.JDialog {
         
         // Usar setDouble para valores numéricos
         ps.setDouble(3, monto);
-        
+        ps.setString(4, categoria);
         
         int resultado = ps.executeUpdate();
         if (resultado > 0) {

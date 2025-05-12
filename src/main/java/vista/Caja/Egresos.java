@@ -55,7 +55,7 @@ public final class Egresos extends javax.swing.JPanel {
             caja.getId_codigo(),
             caja.getFecha(),
             caja.getDescripcion(),
-            caja.getCategoria_idCategoria(),
+            caja.getCategoria(),
             caja.getMonto()
         });
     }
@@ -78,6 +78,7 @@ public final class Egresos extends javax.swing.JPanel {
         btnEliminar = new rojeru_san.RSButtonRiple();
         jScrollPane2 = new javax.swing.JScrollPane();
         Tabla1 = new RSMaterialComponent.RSTableMetro();
+        jLabel1 = new javax.swing.JLabel();
 
         setBackground(new java.awt.Color(255, 255, 255));
 
@@ -88,7 +89,7 @@ public final class Egresos extends javax.swing.JPanel {
         jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         txtbuscar.setBackground(new java.awt.Color(245, 245, 245));
-        txtbuscar.setForeground(new java.awt.Color(29, 30, 91));
+        txtbuscar.setForeground(new java.awt.Color(0, 0, 0));
         txtbuscar.setColorIcon(new java.awt.Color(29, 30, 111));
         txtbuscar.setColorMaterial(new java.awt.Color(29, 30, 111));
         txtbuscar.setIcons(rojeru_san.efectos.ValoresEnum.ICONS.SEARCH);
@@ -141,6 +142,10 @@ public final class Egresos extends javax.swing.JPanel {
         jScrollPane2.setViewportView(Tabla1);
 
         jPanel3.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 90, 1160, 490));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 25)); // NOI18N
+        jLabel1.setText("Egresos");
+        jPanel3.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 20, -1, -1));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -272,6 +277,7 @@ filtrarTabla();
     private rojeru_san.RSButtonRiple btnEliminar;
     private rojeru_san.RSButtonRiple btnGuardar;
     private rojeru_san.RSButtonRiple btnNuevoProduc;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
