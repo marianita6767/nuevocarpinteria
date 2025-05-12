@@ -7,7 +7,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import modelo.Catalogoproducto;
+import modelo.producto;
 
 /**
  *
@@ -15,14 +15,14 @@ import modelo.Catalogoproducto;
  */
 public class catalogoNuevo extends javax.swing.JDialog {
 
-     private Catalogoproducto productoCreado;
+     private producto productoCreado;
     
 public catalogoNuevo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
        
     }
-public Catalogoproducto getProductoCreado() {
+public producto getProductoCreado() {
     return this.productoCreado; 
 }
 
@@ -299,7 +299,7 @@ private Image obtenerImagenDelLabel() {
         }
         
         // Crear producto
-        this.productoCreado = new Catalogoproducto(
+        this.productoCreado = new producto(
             txtNombre.getText(),
             txtColor.getText(),
             txtMaterial.getText(),

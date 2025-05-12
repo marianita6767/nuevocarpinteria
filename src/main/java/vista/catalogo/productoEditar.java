@@ -1,6 +1,6 @@
 package vista.catalogo;
 
-import modelo.Catalogoproducto;
+
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
@@ -9,13 +9,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import modelo.producto;
 
 public class productoEditar extends javax.swing.JDialog {
-    private Catalogoproducto producto;
+    private producto producto;
     private boolean guardado = false;
     private Image imagenTemporal;
 
-    public productoEditar(java.awt.Frame parent, boolean modal, Catalogoproducto producto) {
+    public productoEditar(java.awt.Frame parent, boolean modal, producto producto) {
         super(parent, modal);
         this.producto = producto;
         initComponents();
@@ -40,7 +41,7 @@ public class productoEditar extends javax.swing.JDialog {
         }
     }
 
-    public Catalogoproducto getProductoEditado() {
+    public producto getProductoEditado() {
         return guardado ? producto : null;
     }
     

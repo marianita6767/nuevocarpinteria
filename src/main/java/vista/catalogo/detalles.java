@@ -7,7 +7,7 @@ package vista.catalogo;
 
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import modelo.Catalogoproducto;
+
 import vista.catalogo.catalogoNuevo;
 
 public class detalles extends javax.swing.JDialog {
