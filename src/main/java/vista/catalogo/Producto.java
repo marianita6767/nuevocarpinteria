@@ -321,7 +321,7 @@ public class Producto extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_volverActionPerformed
 
-                      
+       //ol               
 
                                   
 
