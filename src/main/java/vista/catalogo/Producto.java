@@ -323,7 +323,7 @@ public class Producto extends javax.swing.JPanel {
 
        //ol               
 
-                                  
+        //"                          
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
