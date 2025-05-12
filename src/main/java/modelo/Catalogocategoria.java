@@ -6,13 +6,17 @@ public class Catalogocategoria {
     private int idCategoria;
     private String nombre;
     private Image imagen;
-
+private int id;
     public Catalogocategoria(String nombre, Image imagen) {
         this.nombre = nombre;
         this.imagen = imagen;
     }
 
     // Getters y Setters
+    
+    public int getId() {
+    return id;
+}
     public int getIdCategoria() {
         return idCategoria;
     }
