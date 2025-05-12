@@ -1,34 +1,33 @@
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JDialog.java to edit this template
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package vista.Produccionn;
 
+import java.awt.event.ActionListener;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 /**
  *
- * @author EQUIPO
+ * @author pc
  */
-public class DetalleProduccionProducto extends javax.swing.JDialog {
-
-    private int idProduccion;
-
-    public DetalleProduccionProducto(java.awt.Frame parent, boolean modal,
-            int idProduccion, String nombre,
-            String fechaInicio, String fechaFin,
-            String estado) {
-        super(parent, modal);
-        this.idProduccion = idProduccion;
+public class DetalleProduProducto extends javax.swing.JPanel {
+private int idProduccion;
+private String nombre;
+private String fechaInicio;
+private String fechaFin;
+private String estado;
+    /**
+     * Creates new form DetallePdroduProducto
+     */
+    public DetalleProduProducto(int idProduccion1, String nombre, String fechaInicio, String fechaFin, String estado) {
         initComponents();
-        setLocationRelativeTo(parent);
-        
-        DetallePedido es = new DetallePedido(this.idProduccion);
-        es.setSize(1090, 690);
-        es.setLocation(0, 0);
-
-        jPanel2.removeAll();
-        jPanel2.add(es);
-        jPanel2.revalidate();
-        jPanel2.repaint();
+        this.idProduccion = idProduccion;
+    this.nombre = nombre;
+    this.fechaInicio = fechaInicio;
+    this.fechaFin = fechaFin;
+    this.estado = estado;
     }
 
     /**
@@ -45,9 +44,6 @@ public class DetalleProduccionProducto extends javax.swing.JDialog {
         btnEtapa = new RSMaterialComponent.RSButtonShape();
         btndetalle = new RSMaterialComponent.RSButtonShape();
         jPanel2 = new javax.swing.JPanel();
-
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setUndecorated(true);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -114,7 +110,7 @@ public class DetalleProduccionProducto extends javax.swing.JDialog {
                         .addGap(10, 10, 10)
                         .addComponent(btnEtapa, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,8 +126,8 @@ public class DetalleProduccionProducto extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -140,88 +136,39 @@ public class DetalleProduccionProducto extends javax.swing.JDialog {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
-        this.dispose();
-
+if (volverListener != null) {
+        volverListener.actionPerformed(evt);
+    }
     }//GEN-LAST:event_btnvolverActionPerformed
 
     private void btnEtapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtapaActionPerformed
         ProduccionContEtapa es = new ProduccionContEtapa(this.idProduccion);
-        es.setSize(1090, 690);
-        es.setLocation(0, 0);
-
-        jPanel2.removeAll();
-        jPanel2.add(es);
-        jPanel2.revalidate();
-        jPanel2.repaint();
+        mostrarPanelSecundario(es);
     }//GEN-LAST:event_btnEtapaActionPerformed
 
     private void btndetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndetalleActionPerformed
         DetallePedido es = new DetallePedido(this.idProduccion);
-        es.setSize(1090, 690);
-        es.setLocation(0, 0);
-
-        jPanel2.removeAll();
-        jPanel2.add(es);
-        jPanel2.revalidate();
-        jPanel2.repaint();
+        mostrarPanelSecundario(es);
     }//GEN-LAST:event_btndetalleActionPerformed
+private void mostrarPanelSecundario(JPanel panel) {
+    panel.setSize(1090, 690);
+    panel.setLocation(0, 0);
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccionProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccionProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccionProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DetalleProduccionProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    jPanel2.removeAll();
+    jPanel2.add(panel);
+    jPanel2.revalidate();
+    jPanel2.repaint();
+}
 
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                // Proporciona valores por defecto para los parámetros faltantes
-                DetalleProduccionProducto dialog = new DetalleProduccionProducto(
-                        new javax.swing.JFrame(), // parent
-                        true, // modal
-                        0, // idProduccion (valor por defecto)
-                        "Sin nombre", // nombre (valor por defecto)
-                        "", // fechaInicio (valor por defecto)
-                        "", // fechaFin (valor por defecto)
-                        "Sin estado" // estado (valor por defecto)
-                );
+private ActionListener volverListener;
 
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
+public void setVolverListener(ActionListener listener) {
+    this.volverListener = listener;
+}
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private RSMaterialComponent.RSButtonShape btnEtapa;

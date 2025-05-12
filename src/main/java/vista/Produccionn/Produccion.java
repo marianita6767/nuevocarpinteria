@@ -4,6 +4,7 @@
  */
 package vista.Produccionn;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -194,6 +195,9 @@ public final class Produccion extends javax.swing.JPanel {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 Tabla1MouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Tabla1MouseEntered(evt);
+            }
         });
         jScrollPane2.setViewportView(Tabla1);
 
@@ -331,33 +335,41 @@ public final class Produccion extends javax.swing.JPanel {
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
         int column = Tabla1.columnAtPoint(evt.getPoint());
-        int row = Tabla1.rowAtPoint(evt.getPoint());
+    int row = Tabla1.rowAtPoint(evt.getPoint());
 
-        if (column == 5) { // Columna "Ver"
-            // Obtener datos de la fila
-            // Obtener el ID de producción de la fila clickeada
-            int idProduccion = (int) Tabla1.getValueAt(row, 0);
+    if (column == 5) { // Columna "Ver"
+        // Obtener datos de la fila
+        int idProduccion = (int) Tabla1.getValueAt(row, 0);
+        String nombre = (String) Tabla1.getValueAt(row, 1);
+        String fechaInicio = (String) Tabla1.getValueAt(row, 2);
+        String fechaFin = (String) Tabla1.getValueAt(row, 3);
+        String estado = (String) Tabla1.getValueAt(row, 4);
 
-            String nombre = (String) Tabla1.getValueAt(row, 1);
-            String fechaInicio = (String) Tabla1.getValueAt(row, 2);
-            String fechaFin = (String) Tabla1.getValueAt(row, 3);
-            String estado = (String) Tabla1.getValueAt(row, 4);
+        // Crear el panel de detalle
+        DetalleProduProducto detallePanel = new DetalleProduProducto(
+            idProduccion, nombre, fechaInicio, fechaFin, estado);
+        
+        // Configurar el botón de volver
+        detallePanel.setVolverListener(e -> {
+            removeAll();
+            setLayout(new BorderLayout());
+            add(jPanel1, BorderLayout.CENTER);
+            revalidate();
+            repaint();
+        });
 
-            // Crear y mostrar diálogo
-            DetalleProduccionProducto dialog = new DetalleProduccionProducto(
-                    new javax.swing.JFrame(),
-                    true,
-                    idProduccion,
-                    nombre,
-                    fechaInicio,
-                    fechaFin,
-                    estado
-            );
-            dialog.setLocationRelativeTo(null);
-            dialog.setVisible(true);
-
-        }
+        // Reemplazar el contenido
+        removeAll();
+        setLayout(new BorderLayout());
+        add(detallePanel, BorderLayout.CENTER);
+        revalidate();
+        repaint();
+    }
     }//GEN-LAST:event_Tabla1MouseClicked
+
+    private void Tabla1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_Tabla1MouseEntered
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -399,7 +411,7 @@ public final class Produccion extends javax.swing.JPanel {
             return;
         }
 
-        String sql = "SELECT p.id_produccion, pe.nombre, p.fecha_inicio, p.fecha_fin, p.estado, "
+        String sql = "SELECT p.id_produccion, dp.descripcion, p.fecha_inicio, p.fecha_fin, p.estado, "
                 + "dp.descripcion AS detalle "
                 + "FROM produccion p "
                 + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
@@ -413,7 +425,7 @@ public final class Produccion extends javax.swing.JPanel {
             while (rs.next()) {
                 model.addRow(new Object[]{
                     rs.getInt("id_produccion"),
-                    rs.getString("nombre"),
+                    rs.getString("descripcion"),
                     sdf.format(rs.getDate("fecha_inicio")),
                     sdf.format(rs.getDate("fecha_fin")),
                     rs.getString("estado"),
