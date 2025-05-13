@@ -1231,8 +1231,8 @@ public class Principal extends javax.swing.JFrame {
             this.nueve.setSelected(true);
 
             // Crear y mostrar el panel de inventario
-          //Producto cat = new Producto(new javax.swing.JFrame(), true);
-           catalogo cat = new catalogo(this, submenuVisible);
+          Producto cat = new Producto(new javax.swing.JFrame(), true);
+           //catalogo cat = new catalogo(this, submenuVisible);
             cat.setSize(1290, 730);
             cat.setLocation(0, 0);
 
