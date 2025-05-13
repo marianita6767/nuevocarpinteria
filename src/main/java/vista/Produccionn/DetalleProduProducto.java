@@ -15,25 +15,28 @@ import javax.swing.JPanel;
 public class DetalleProduProducto extends javax.swing.JPanel {
 
     private int idProduccion;
-    private String nombre;
-    private String fechaInicio;
-    private String fechaFin;
-    private String estado;
-    private String cantidad;
-    private String dimensiones;
+    
 
     /**
      * Creates new form DetallePdroduProducto
      */
-    public DetalleProduProducto(int idProduccion1) {
+    public DetalleProduProducto(int idProduccion, String nombre, String fechaInicio,
+            String fechaFin, String estado, String cantidad, String dimensiones) {
+        System.out.println("ID recibido en constructor: " + idProduccion); 
+        this.idProduccion = idProduccion;
         initComponents();
+
+        DetallePedido detallePanel = new DetallePedido(
+                idProduccion,
+                nombre,
+                fechaInicio,
+                fechaFin,
+                estado,
+                String.valueOf(cantidad),
+                dimensiones
+        );
+        mostrarPanelSecundario(detallePanel);
         
-        DetallePedido detalle = new DetallePedido(
-        this.idProduccion
-                
-        
-    );
-    mostrarPanelSecundario(detalle);
     }
 
     /**
@@ -52,6 +55,7 @@ public class DetalleProduProducto extends javax.swing.JPanel {
         jPanel2 = new javax.swing.JPanel();
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setPreferredSize(new java.awt.Dimension(1250, 630));
 
         btnvolver.setBackground(new java.awt.Color(46, 49, 82));
         btnvolver.setBorder(javax.swing.BorderFactory.createCompoundBorder());
@@ -136,18 +140,17 @@ public class DetalleProduProducto extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 1186, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
-        if (volverListener != null) {
-            volverListener.actionPerformed(evt);
-        }
+        Produccion pr = new Produccion(new javax.swing.JFrame());
+        mostrarPanel(pr);
     }//GEN-LAST:event_btnvolverActionPerformed
 
     private void btnEtapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtapaActionPerformed
@@ -157,10 +160,9 @@ public class DetalleProduProducto extends javax.swing.JPanel {
 
     private void btndetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndetalleActionPerformed
         DetallePedido detalle = new DetallePedido(
-        this.idProduccion
-        
-    );
-    mostrarPanelSecundario(detalle);
+                this.idProduccion
+        );
+        mostrarPanelSecundario(detalle);
     }//GEN-LAST:event_btndetalleActionPerformed
     private void mostrarPanelSecundario(JPanel panel) {
         panel.setSize(1090, 690);
@@ -170,6 +172,16 @@ public class DetalleProduProducto extends javax.swing.JPanel {
         jPanel2.add(panel);
         jPanel2.revalidate();
         jPanel2.repaint();
+    }
+    
+    private void mostrarPanel(JPanel panel) {
+        panel.setSize(1250, 630);
+        panel.setLocation(0, 0);
+
+        jPanel1.removeAll();
+        jPanel1.add(panel);
+        jPanel1.revalidate();
+        jPanel1.repaint();
     }
 
     private ActionListener volverListener;

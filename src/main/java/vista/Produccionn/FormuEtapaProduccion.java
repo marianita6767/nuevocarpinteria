@@ -52,6 +52,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         txtfechafin = new com.toedter.calendar.JDateChooser();
         btnGuardar1 = new rojeru_san.RSButtonRiple();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -77,12 +78,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel9.setForeground(new java.awt.Color(0, 0, 0));
         jLabel9.setText("Fecha final:");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, -1, -1));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 320, -1, -1));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel10.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel10.setText("Nombre etapa:");
-        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+        jLabel10.setText("Cantidad");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
 
         txtetapa.setEditable(false);
         txtetapa.setBackground(new java.awt.Color(255, 255, 255));
@@ -102,7 +103,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
         jLabel11.setForeground(new java.awt.Color(0, 0, 0));
         jLabel11.setText("Fecha inicio:");
-        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 160, -1, -1));
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 240, -1, -1));
 
         Boxestado.setForeground(new java.awt.Color(102, 102, 102));
         Boxestado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
@@ -118,12 +119,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         txtFechainicio.setForeground(new java.awt.Color(255, 255, 255));
         txtFechainicio.setDateFormatString("y-MM-d");
         txtFechainicio.setMaxSelectableDate(new java.util.Date(253370786472000L));
-        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 190, 30));
+        jPanel1.add(txtFechainicio, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 270, 190, 30));
 
         txtfechafin.setBackground(new java.awt.Color(255, 255, 255));
         txtfechafin.setForeground(new java.awt.Color(255, 255, 255));
         txtfechafin.setDateFormatString("y-MM-d");
-        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 190, 190, 30));
+        jPanel1.add(txtfechafin, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 350, 190, 30));
 
         btnGuardar1.setBackground(new java.awt.Color(46, 49, 82));
         btnGuardar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/plus (2).png"))); // NOI18N
@@ -135,7 +136,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 btnGuardar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, 140, -1));
+        jPanel1.add(btnGuardar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 580, 140, -1));
 
         btnCancelar1.setBackground(new java.awt.Color(46, 49, 82));
         btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/salida (1).png"))); // NOI18N
@@ -147,7 +148,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
                 btnCancelar1ActionPerformed(evt);
             }
         });
-        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 260, 140, -1));
+        jPanel1.add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 590, 140, -1));
+
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel12.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel12.setText("Nombre etapa:");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -157,9 +163,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
         );
 
         pack();
@@ -324,6 +328,7 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
