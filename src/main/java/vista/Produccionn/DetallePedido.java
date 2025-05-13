@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import modelo.Conexion;
 
@@ -18,19 +19,34 @@ import modelo.Conexion;
 public class DetallePedido extends javax.swing.JPanel {
 
     private final int idProduccion;
-
+public DetallePedido(int idProduccion) {
+    this.idProduccion = idProduccion;
+    initComponents();
+    cargarDatosPedido(); // Método que carga los datos desde la BD
+}
     /**
      * Creates new form DetallePedido
      */
-    public DetallePedido(int idProduccion) {
-        this.idProduccion = idProduccion;
-        initComponents();
-        cargarDatosPedido();
-    }
+    // Constructor corregido
+    public DetallePedido(int idProduccion, String nombre, String fechaInicio, 
+                    String fechaFin, String estado, String cantidad, String dimensiones) {
+    System.out.println("ID recibido en constructor: " + idProduccion); // Debug
+    this.idProduccion = idProduccion;
+    initComponents();
+    // Asignar valores directamente
+    this.nombre.setText(nombre != null ? nombre : "");
+    this.fecha_ini.setText(fechaInicio != null ? fechaInicio : "");
+    this.fecha_fin.setText(fechaFin != null ? fechaFin : "");
+    this.estado.setText(estado != null ? estado : "");
+    this.cantidad.setText(cantidad != null ? cantidad : "0");
+    this.dimensiones.setText(dimensiones != null ? dimensiones : "");
+}
 
     private void cargarDatosPedido() {
+        limpiarCampos(); // Limpia antes de cargar nuevos datos
+
         try (Connection con = new Conexion().getConnection()) {
-            String sql = "SELECT pe.nombre, p.fecha_inicio, p.fecha_fin, p.estado, "
+            String sql = "SELECT p.fecha_inicio, p.fecha_fin, p.estado, "
                     + "dp.cantidad, dp.dimensiones, dp.descripcion "
                     + "FROM produccion p "
                     + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
@@ -41,21 +57,26 @@ public class DetallePedido extends javax.swing.JPanel {
                 ps.setInt(1, idProduccion);
                 try (ResultSet rs = ps.executeQuery()) {
                     if (rs.next()) {
-                        nombre.setText(rs.getString("nombre"));
-                        fecha_ini.setText(rs.getString("fecha_inicio"));
-                        fecha_fin.setText(rs.getString("fecha_fin"));
-                        estado.setText(rs.getString("estado"));
-                        cantidad.setText(String.valueOf(rs.getInt("cantidad")));
-                        cantidad1.setText(String.valueOf(rs.getInt("cantidad")));
-                        dimensiones.setText(rs.getString("dimensiones"));
-                        // Si necesitas mostrar la descripción también
-                        // descripcionLabel.setText(rs.getString("descripcion"));
+                        // Formatear fechas si es necesario
+                        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                        nombre.setText(rs.getString("descripcion") != null ? rs.getString("descripcion") : "No disponible");
+                        fecha_ini.setText(rs.getDate("fecha_inicio") != null ? sdf.format(rs.getDate("fecha_inicio")) : "No definida");
+                        fecha_fin.setText(rs.getDate("fecha_fin") != null ? sdf.format(rs.getDate("fecha_fin")) : "No definida");
+                        estado.setText(rs.getString("estado") != null ? rs.getString("estado") : "Sin estado");
+                        cantidad.setText(rs.getString("cantidad") != null ? rs.getString("cantidad") : "0");
+                        cantidad1.setText(cantidad.getText()); // Usamos el mismo valor
+                        dimensiones.setText(rs.getString("dimensiones") != null ? rs.getString("dimensiones") : "No especificadas");
+                    } else {
+                        // Si no hay datos, muestra un mensaje en un campo
+                        nombre.setText("No se encontraron datos para el pedido ID: " + idProduccion);
                     }
                 }
             }
         } catch (SQLException e) {
+            nombre.setText("Error al cargar datos");
             JOptionPane.showMessageDialog(this,
-                    "Error al cargar detalles del pedido: " + e.getMessage(),
+                    "Error de conexión: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -109,7 +130,7 @@ public class DetallePedido extends javax.swing.JPanel {
         cantidad.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cantidad.setForeground(new java.awt.Color(0, 0, 0));
         cantidad.setText("cantidad");
-        jPanel2.add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, -1, -1));
+        jPanel2.add(cantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, -1, -1));
 
         dimensiones.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         dimensiones.setForeground(new java.awt.Color(0, 0, 0));
@@ -179,7 +200,7 @@ public class DetallePedido extends javax.swing.JPanel {
         cantidad1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         cantidad1.setForeground(new java.awt.Color(0, 0, 0));
         cantidad1.setText("cantidad");
-        jPanel2.add(cantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 80, -1, -1));
+        jPanel2.add(cantidad1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 260, -1, -1));
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(0, 0, 0));
@@ -198,7 +219,15 @@ public class DetallePedido extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-
+    private void limpiarCampos() {
+        nombre.setText("");
+        fecha_ini.setText("");
+        fecha_fin.setText("");
+        estado.setText("");
+        cantidad.setText("");
+        cantidad1.setText("");
+        dimensiones.setText("");
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel cantidad;
     private javax.swing.JLabel cantidad1;
