@@ -44,7 +44,7 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
         Tabla1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         Tabla1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{},
-                new String[]{"Nombre", "Fecha inicio", "Fecha final", "Estado", "Materiales", "Asignado"}
+                new String[]{"Nombre", "Cantidad","Fecha inicio", "Fecha final", "Estado", "Materiales", "Asignado"}
         ));
 
         Tabla1.setCellSelectionEnabled(false);
@@ -111,11 +111,11 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
 
     private void cargarEtapasProduccion() {
         try (Connection con = Conexion.getConnection()) {
-            String sql = "SELECT e.id_etapa, e.etapa, e.fecha_inicio, e.fecha_fin, e.estado, "
-                    + "e.descripcion, e.responsable "
-                    + "FROM etapas_produccion e "
-                    + "WHERE e.id_produccion = ? "
-                    + "ORDER BY e.fecha_inicio";
+            String sql = "SELECT ep.idetapa_produccion, ep.nombre_etapa, dp.cantidad, ep.fecha_inicio, "
+                    + "ep.fecha_fin,  ep.estado, dp.produccion_codigo "
+                    + "FROM etapa_produccion ep "
+                    + "JOIN detalle_pedido dp ON ep.produccion_codigo = dp.iddetalle_pedido "
+                    + "ORDER BY p.idestado_produccion ASC";
 
             try (PreparedStatement ps = con.prepareStatement(sql)) {
                 ps.setInt(1, this.idProduccion);
@@ -125,13 +125,13 @@ public final class ProduccionContEtapa extends javax.swing.JPanel {
 
                     while (rs.next()) {
                         model.addRow(new Object[]{
-                            rs.getInt("id_etapa"),
-                            rs.getString("etapa"),
+                            rs.getString("nombre_etapa"),
+                            rs.getString("cantidad"),
                             rs.getString("fecha_inicio"),
                             rs.getString("fecha_fin"),
                             rs.getString("estado"),
-                            rs.getString("descripcion"),
-                            rs.getString("responsable")
+                            rs.getString(""),
+                            rs.getString("")
                         });
                     }
                 }

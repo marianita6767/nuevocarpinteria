@@ -32,9 +32,6 @@ public class formuProduccion extends javax.swing.JDialog {
         txtdimen.setEnabled(false);
     }
 
-    
-
-
     public formuProduccion(java.awt.Frame parent, boolean modal) {
         this(parent, modal, null);  // Llama al nuevo constructor con null
     }
@@ -209,7 +206,7 @@ public class formuProduccion extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-// 1. Mostrar diálogo de confirmación
+//  Mostrar diálogo de confirmación
         alertaa confirmDialog = new alertaa(
                 (Frame) this.getParent(),
                 true,
@@ -218,7 +215,7 @@ public class formuProduccion extends javax.swing.JDialog {
         );
         confirmDialog.setVisible(true);
 
-        // 2. Si el usuario no confirma, salir
+        //  Si el usuario no confirma, salir
         if (!confirmDialog.opcionConfirmada) {
             return;
         }
@@ -236,14 +233,14 @@ public class formuProduccion extends javax.swing.JDialog {
         try {
             con = Conexion.getConnection();
 
-            // 1. Obtener el iddetalle_pedido basado en el nombre seleccionado
+            //  Obtener el iddetalle_pedido basado en el nombre seleccionado
             int idDetallePedido = obtenerIdDetallePedido(con, BoxNombreP.getSelectedItem().toString());
             if (idDetallePedido == -1) {
                 new Error_id_((Frame) this.getParent(), true, "Error", "La fecha final no puede ser anterior a la inicial").setVisible(true);
                 return;
             }
 
-            // 2. Insertar en la tabla produccion
+            //  Insertar en la tabla produccion
             String sql = "INSERT INTO produccion (fecha_inicio, fecha_fin, estado, detalle_pedido_iddetalle_pedido) "
                     + "VALUES (?, ?, ?, ?)";
 
@@ -317,10 +314,9 @@ public class formuProduccion extends javax.swing.JDialog {
             txtdimen.setEnabled(false);
             return;
         }
-        
+
         txtcantidad.setEnabled(true);
         txtdimen.setEnabled(true);
-        
 
         Item selectedItem = (Item) BoxNombreP.getSelectedItem();
         int idDetallePedido = selectedItem.getId();
@@ -426,10 +422,7 @@ private int obtenerIdDetallePedido(Connection con, String nombrePedido) throws S
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
-            String sql = "SELECT dp.iddetalle_pedido "
-                    + "FROM detalle_pedido dp "
-                    + "JOIN pedido p ON dp.pedido_id_pedido = p.id_pedido "
-                    + "WHERE p.nombre = ?";
+            String sql = "SELECT iddetalle_pedido FROM detalle_pedido WHERE descripcion = ?";
 
             ps = con.prepareStatement(sql);
             ps.setString(1, nombrePedido);
@@ -447,6 +440,7 @@ private int obtenerIdDetallePedido(Connection con, String nombrePedido) throws S
                 ps.close();
             }
         }
+
     }
 
     private void cargarNombresPedidos() {

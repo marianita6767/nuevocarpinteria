@@ -808,7 +808,7 @@ public class PrincipalUsu extends javax.swing.JFrame {
             deseleccionar();
             this.cuatro.setSelected(true);
 
-            Produccion pr = new Produccion(new javax.swing.JFrame(), true);
+            Produccion pr = new Produccion(new javax.swing.JFrame());
             pr.setSize(1290, 730);
             pr.setLocation(0, 0);
 

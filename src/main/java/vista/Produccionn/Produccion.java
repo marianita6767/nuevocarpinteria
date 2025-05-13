@@ -35,7 +35,7 @@ public final class Produccion extends javax.swing.JPanel {
     /**
      * Creates new form produccionContenido
      */
-    public Produccion(JFrame jFrame, boolean par) {
+    public Produccion(JFrame jFrame) {
         initComponents();
 
         // Configuración básica de la tabla
@@ -432,7 +432,7 @@ public final class Produccion extends javax.swing.JPanel {
         System.out.println("Dimensiones: " + dimensiones);
         
         // 10. Crear y configurar el panel de detalle
-        DetallePedido detallePanel = new DetallePedido(
+        DetalleProduProducto detallePanel = new DetalleProduProducto(
             idProduccion,
             nombre,
             fechaInicio,
@@ -444,7 +444,7 @@ public final class Produccion extends javax.swing.JPanel {
         
         
         
-        // 12. Mostrar el panel de detalle
+        // 11. Mostrar el panel de detalle
         removeAll();
         setLayout(new BorderLayout());
         add(detallePanel, BorderLayout.CENTER);
