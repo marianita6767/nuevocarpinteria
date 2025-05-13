@@ -23,39 +23,53 @@ public class Producto extends javax.swing.JPanel {
     }
 
     private void initCustomComponents() {
-        // Configuración del panel principal
-        this.setBackground(new Color(242, 242, 242));
-        this.setLayout(new BorderLayout());
-        
-        // Configuración del panel de productos
-        PProductos.setBackground(new Color(242, 242, 242));
-        PProductos.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
-        
-        // Configuración del panel de botones
-        JPanel panelBotones = new JPanel();
-        panelBotones.setBackground(new Color(242, 242, 242));
-        panelBotones.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
-        panelBotones.add(volver);
-        panelBotones.add(Nueva);
-        panelBotones.add(Eliminar);
-        
-        // Configuración del scroll pane
-        scrollPane = new JScrollPane(PProductos);
-        scrollPane.setBackground(new Color(242, 242, 242));
-        scrollPane.getViewport().setBackground(new Color(242, 242, 242));
-        scrollPane.setBorder(null);
-        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        
-        // Agregar componentes al panel principal
-        this.add(panelBotones, BorderLayout.NORTH);
-        this.add(scrollPane, BorderLayout.CENTER);
-        
-        // Configuración de botones
-        configurarBoton(Nueva);
-        configurarBoton(Eliminar);
-        configurarBoton(volver);
-    }
+    // Configuración del panel principal
+    this.setBackground(new Color(242, 242, 242));
+    this.setLayout(new BorderLayout());
+
+    // Configuración del panel de productos
+    PProductos.setBackground(new Color(242, 242, 242));
+    PProductos.setLayout(new GridLayout(0, 4, 20, 20)); // Cambiado a GridLayout con 4 columnas y espacios
+
+    // Ajustar columnas dinámicamente según tamaño para responsividad básica
+    PProductos.addComponentListener(new java.awt.event.ComponentAdapter() {
+        @Override
+        public void componentResized(java.awt.event.ComponentEvent evt) {
+            int width = PProductos.getWidth();
+            int columnas;
+            if (width < 600) {
+                columnas = 2;
+            } else {
+                columnas = 4;
+            }
+            ((GridLayout)PProductos.getLayout()).setColumns(columnas);
+            PProductos.revalidate();
+        }
+    });
+       JPanel panelBotones = new JPanel();
+    panelBotones.setBackground(new Color(242, 242, 242));
+    panelBotones.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 10));
+    panelBotones.add(volver);
+    panelBotones.add(Nueva);
+    panelBotones.add(Eliminar);
+
+    // Configuración del scroll pane
+    scrollPane = new JScrollPane(PProductos);
+    scrollPane.setBackground(new Color(242, 242, 242));
+    scrollPane.getViewport().setBackground(new Color(242, 242, 242));
+    scrollPane.setBorder(null);
+    scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+    scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER); // Mejor evitar scroll horizontal
+
+    // Agregar componentes al panel principal
+    this.add(panelBotones, BorderLayout.NORTH);
+    this.add(scrollPane, BorderLayout.CENTER);
+
+    // Configuración de botones
+    configurarBoton(Nueva);
+    configurarBoton(Eliminar);
+    configurarBoton(volver);
+}
 
     private void configurarBoton(rojeru_san.RSButtonRiple boton) {
         boton.setBackground(new Color(46, 49, 82));
@@ -72,40 +86,73 @@ public class Producto extends javax.swing.JPanel {
 
     void actualizarPanelProductos() {
         PProductos.removeAll();
-        PProductos.setLayout(new FlowLayout(FlowLayout.LEFT, 20, 20));
-        checkBoxes.clear();
+    // Ya no seteamos layout aquí porque se hace en initCustomComponents
+    checkBoxes.clear();
 
-        Color colorTarjeta = new Color(242, 242, 242);
+    Color colorTarjeta = new Color(242, 242, 242);
 
-        for (producto prod : productos) {
-            JPanel panelProducto = crearPanelProducto(prod, colorTarjeta);
-            PProductos.add(panelProducto);
-        }
+    for (producto prod : productos) {
+        JPanel panelProducto = crearPanelProducto(prod, colorTarjeta);
+        PProductos.add(panelProducto);
+    }
 
-        PProductos.revalidate();
-        PProductos.repaint();
-        scrollPane.getVerticalScrollBar().setValue(0);
+    PProductos.revalidate();
+    PProductos.repaint();
+    scrollPane.getVerticalScrollBar().setValue(0);
     }
 
     private JPanel crearPanelProducto(producto prod, Color colorTarjeta) {
-        JPanel panelProducto = new JPanel(new BorderLayout());
-        panelProducto.setPreferredSize(new Dimension(200, 240));
-        panelProducto.setBackground(colorTarjeta);
-        panelProducto.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 220, 220)),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
+           JPanel panelProducto = new JPanel(new BorderLayout());
+    panelProducto.setPreferredSize(new Dimension(280, 320)); // Tamaño similar a la imagen
+    panelProducto.setBackground(Color.WHITE);
+    panelProducto.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+    panelProducto.setLayout(new BorderLayout());
 
-        // Panel superior con checkbox y botón de editar
-        panelProducto.add(crearPanelSuperior(prod), BorderLayout.NORTH);
-        
-        // Imagen del producto
-        panelProducto.add(crearPanelImagen(prod), BorderLayout.CENTER);
-        
-        // Nombre del producto
-        panelProducto.add(crearLabelNombre(prod), BorderLayout.SOUTH);
+    // Panel para la imagen (solo imagen)
+    JPanel panelImagen = new JPanel(new BorderLayout());
+    panelImagen.setPreferredSize(new Dimension(280, 280));
+    panelImagen.setBackground(Color.WHITE);
 
-        return panelProducto;
+    JLabel imagenLabel = new JLabel();
+    imagenLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    if (prod.getImagen() != null) {
+        ImageIcon icon = new ImageIcon(prod.getImagen().getScaledInstance(280, 280, Image.SCALE_SMOOTH));
+        imagenLabel.setIcon(icon);
+    }
+    panelImagen.add(imagenLabel, BorderLayout.CENTER);
+
+    panelProducto.add(panelImagen, BorderLayout.CENTER);
+
+    // Panel inferior con nombre y botón editar a la derecha
+    JPanel panelInferior = new JPanel(new BorderLayout());
+    panelInferior.setBackground(Color.WHITE);
+    panelInferior.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+    // Label nombre producto
+    JLabel nombreLabel = new JLabel(prod.getNombre());
+    nombreLabel.setFont(new Font("Segoe UI Black", Font.PLAIN, 28));
+    nombreLabel.setForeground(Color.BLACK);
+    nombreLabel.setVerticalAlignment(SwingConstants.CENTER);
+
+    panelInferior.add(nombreLabel, BorderLayout.WEST);
+
+    // Botón editar circular blanco con icono negro
+    JButton btnEditar = new JButton();
+    btnEditar.setPreferredSize(new Dimension(48, 48));
+    btnEditar.setBackground(Color.WHITE);
+    btnEditar.setFocusPainted(false);
+    btnEditar.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220), 1));
+    btnEditar.setContentAreaFilled(true);
+    btnEditar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+    btnEditar.setToolTipText("Editar producto");
+    btnEditar.setIcon(new ImageIcon(getClass().getResource("/catalogo/pencil1.png")));
+    btnEditar.addActionListener(e -> abrirEditarProducto(prod));
+
+    panelInferior.add(btnEditar, BorderLayout.EAST);
+
+    panelProducto.add(panelInferior, BorderLayout.SOUTH);
+
+    return panelProducto;
     }
 
     private JPanel crearPanelSuperior(producto prod) {
