@@ -13,21 +13,27 @@ import javax.swing.JPanel;
  * @author pc
  */
 public class DetalleProduProducto extends javax.swing.JPanel {
-private int idProduccion;
-private String nombre;
-private String fechaInicio;
-private String fechaFin;
-private String estado;
+
+    private int idProduccion;
+    private String nombre;
+    private String fechaInicio;
+    private String fechaFin;
+    private String estado;
+    private String cantidad;
+    private String dimensiones;
+
     /**
      * Creates new form DetallePdroduProducto
      */
-    public DetalleProduProducto(int idProduccion1, String nombre, String fechaInicio, String fechaFin, String estado) {
+    public DetalleProduProducto(int idProduccion1) {
         initComponents();
-        this.idProduccion = idProduccion;
-    this.nombre = nombre;
-    this.fechaInicio = fechaInicio;
-    this.fechaFin = fechaFin;
-    this.estado = estado;
+        
+        DetallePedido detalle = new DetallePedido(
+        this.idProduccion
+                
+        
+    );
+    mostrarPanelSecundario(detalle);
     }
 
     /**
@@ -139,9 +145,9 @@ private String estado;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnvolverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnvolverActionPerformed
-if (volverListener != null) {
-        volverListener.actionPerformed(evt);
-    }
+        if (volverListener != null) {
+            volverListener.actionPerformed(evt);
+        }
     }//GEN-LAST:event_btnvolverActionPerformed
 
     private void btnEtapaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEtapaActionPerformed
@@ -150,24 +156,27 @@ if (volverListener != null) {
     }//GEN-LAST:event_btnEtapaActionPerformed
 
     private void btndetalleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btndetalleActionPerformed
-        DetallePedido es = new DetallePedido(this.idProduccion);
-        mostrarPanelSecundario(es);
+        DetallePedido detalle = new DetallePedido(
+        this.idProduccion
+        
+    );
+    mostrarPanelSecundario(detalle);
     }//GEN-LAST:event_btndetalleActionPerformed
-private void mostrarPanelSecundario(JPanel panel) {
-    panel.setSize(1090, 690);
-    panel.setLocation(0, 0);
+    private void mostrarPanelSecundario(JPanel panel) {
+        panel.setSize(1090, 690);
+        panel.setLocation(0, 0);
 
-    jPanel2.removeAll();
-    jPanel2.add(panel);
-    jPanel2.revalidate();
-    jPanel2.repaint();
-}
+        jPanel2.removeAll();
+        jPanel2.add(panel);
+        jPanel2.revalidate();
+        jPanel2.repaint();
+    }
 
-private ActionListener volverListener;
+    private ActionListener volverListener;
 
-public void setVolverListener(ActionListener listener) {
-    this.volverListener = listener;
-}
+    public void setVolverListener(ActionListener listener) {
+        this.volverListener = listener;
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

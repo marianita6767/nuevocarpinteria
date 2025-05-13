@@ -52,14 +52,24 @@ public final class Produccion extends javax.swing.JPanel {
         // Configura el modelo de tabla correctamente
         DefaultTableModel model = new DefaultTableModel(
                 new Object[][]{},
-                new String[]{"ID", "Nombre", "Fecha inicio", "Fecha Final", "Estado", "Detalle"}
+                new String[]{"ID", "Nombre", "Fecha inicio", "Fecha Final", "Estado", "Detalle", "Cantidad", "Dimensiones"}
         ) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                return String.class; // Esto ayuda al centrado uniforme
+                return String.class;
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; // Hacer que todas las celdas no sean editables
             }
         };
+
         Tabla1.setModel(model);
+
+        // Oculta las columnas adicionales después de establecer el modelo
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(6)); // Oculta Dimensiones
+        Tabla1.removeColumn(Tabla1.getColumnModel().getColumn(6)); // Oculta Cantidad
 
         // Color del texto para todas las celdas
         Color textColor = new Color(46, 49, 82);
@@ -91,6 +101,7 @@ public final class Produccion extends javax.swing.JPanel {
 
         // Carga los datos
         cargarTablaProduccion();
+
     }
 
 // Renderizador para la columna de estado
@@ -334,37 +345,116 @@ public final class Produccion extends javax.swing.JPanel {
     }//GEN-LAST:event_btnElimiActionPerformed
 
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
-        int column = Tabla1.columnAtPoint(evt.getPoint());
-    int row = Tabla1.rowAtPoint(evt.getPoint());
+    // 1. Obtener posición del clic
+    int column = Tabla1.columnAtPoint(evt.getPoint());
+    int viewRow = Tabla1.rowAtPoint(evt.getPoint());
+    
+    // 2. Validar clic
+    if (viewRow < 0 || column < 0) {
+        System.out.println("Clic fuera de las filas/columnas");
+        return;
+    }
 
-    if (column == 5) { // Columna "Ver"
-        // Obtener datos de la fila
-        int idProduccion = (int) Tabla1.getValueAt(row, 0);
-        String nombre = (String) Tabla1.getValueAt(row, 1);
-        String fechaInicio = (String) Tabla1.getValueAt(row, 2);
-        String fechaFin = (String) Tabla1.getValueAt(row, 3);
-        String estado = (String) Tabla1.getValueAt(row, 4);
-
-        // Crear el panel de detalle
-        DetalleProduProducto detallePanel = new DetalleProduProducto(
-            idProduccion, nombre, fechaInicio, fechaFin, estado);
+    // 3. Solo procesar clic en columna "Ver" (índice 5)
+    if (column == 5) {
+        // 4. Convertir índice de vista a modelo (importante si hay filtros aplicados)
+        int modelRow = Tabla1.convertRowIndexToModel(viewRow);
+        DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
         
-        // Configurar el botón de volver
-        detallePanel.setVolverListener(e -> {
-            removeAll();
-            setLayout(new BorderLayout());
-            add(jPanel1, BorderLayout.CENTER);
-            revalidate();
-            repaint();
-        });
-
-        // Reemplazar el contenido
+        // 5. Debug: Mostrar todos los valores de la fila
+        System.out.println("\n--- DATOS DE LA FILA SELECCIONADA ---");
+        for (int i = 0; i < model.getColumnCount(); i++) {
+            System.out.printf("Columna %d (%s): %s %n", 
+                i, 
+                model.getColumnName(i), 
+                model.getValueAt(modelRow, i));
+        }
+        
+        // 6. Obtener y validar el ID
+        Object idObj = model.getValueAt(modelRow, 0);
+        int idProduccion = 0;
+        
+        try {
+            idProduccion = Integer.parseInt(idObj.toString());
+            System.out.println("ID obtenido: " + idProduccion);
+            
+            if (idProduccion <= 0) {
+                JOptionPane.showMessageDialog(this,
+                    "Error: ID de producción no válido (" + idProduccion + ")",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this,
+                "Error: El ID no es un número válido (" + idObj + ")",
+                "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        // 7. Obtener el resto de datos con validación de nulos
+        String nombre = model.getValueAt(modelRow, 1) != null ? 
+                      model.getValueAt(modelRow, 1).toString() : "";
+        
+        String fechaInicio = model.getValueAt(modelRow, 2) != null ? 
+                           model.getValueAt(modelRow, 2).toString() : "";
+        
+        String fechaFin = model.getValueAt(modelRow, 3) != null ? 
+                        model.getValueAt(modelRow, 3).toString() : "En proceso";
+        
+        String estado = model.getValueAt(modelRow, 4) != null ? 
+                      model.getValueAt(modelRow, 4).toString() : "";
+        
+        // 8. Obtener datos de columnas ocultas (cantidad y dimensiones)
+        int cantidad = 0;
+        try {
+            Object cantObj = model.getValueAt(modelRow, 6);
+            cantidad = cantObj != null ? Integer.parseInt(cantObj.toString()) : 0;
+        } catch (NumberFormatException e) {
+            System.out.println("Error al convertir cantidad: " + e.getMessage());
+        }
+        
+        String dimensiones = "";
+        try {
+            Object dimObj = model.getValueAt(modelRow, 7);
+            dimensiones = dimObj != null ? dimObj.toString() : "";
+        } catch (Exception e) {
+            System.out.println("Error al obtener dimensiones: " + e.getMessage());
+        }
+        
+        // 9. Debug: Mostrar datos que se enviarán
+        System.out.println("\n--- DATOS A ENVIAR AL PANEL ---");
+        System.out.println("ID: " + idProduccion);
+        System.out.println("Nombre: " + nombre);
+        System.out.println("Fecha inicio: " + fechaInicio);
+        System.out.println("Fecha fin: " + fechaFin);
+        System.out.println("Estado: " + estado);
+        System.out.println("Cantidad: " + cantidad);
+        System.out.println("Dimensiones: " + dimensiones);
+        
+        // 10. Crear y configurar el panel de detalle
+        DetallePedido detallePanel = new DetallePedido(
+            idProduccion,
+            nombre,
+            fechaInicio,
+            fechaFin,
+            estado,
+            String.valueOf(cantidad),
+            dimensiones
+        );
+        
+        
+        
+        // 12. Mostrar el panel de detalle
         removeAll();
         setLayout(new BorderLayout());
         add(detallePanel, BorderLayout.CENTER);
         revalidate();
         repaint();
+        
+        System.out.println("Panel de detalle mostrado con ID: " + idProduccion);
     }
+
+
     }//GEN-LAST:event_Tabla1MouseClicked
 
     private void Tabla1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseEntered
@@ -401,75 +491,35 @@ public final class Produccion extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) Tabla1.getModel();
         model.setRowCount(0); // Limpiar tabla
 
-        // Verifica primero la conexión
-        try (Connection test = new Conexion().getConnection()) {
-            System.out.println("Conexión exitosa a la base de datos");
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this,
-                    "Error de conexión: " + e.getMessage(),
-                    "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        try (Connection con = new Conexion().getConnection()) {
+            String sql = "SELECT p.id_produccion, dp.descripcion, p.fecha_inicio, "
+                    + "p.fecha_fin, p.estado, dp.cantidad, dp.dimensiones "
+                    + "FROM produccion p "
+                    + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
+                    + "ORDER BY p.id_produccion ASC";
 
-        String sql = "SELECT p.id_produccion, dp.descripcion, p.fecha_inicio, p.fecha_fin, p.estado, "
-                + "dp.descripcion AS detalle "
-                + "FROM produccion p "
-                + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
-                + "JOIN pedido pe ON dp.pedido_id_pedido = pe.id_pedido "
-                + "ORDER BY p.fecha_inicio DESC";
+            try (PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
 
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql); ResultSet rs = ps.executeQuery()) {
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getInt("id_produccion"),
-                    rs.getString("descripcion"),
-                    sdf.format(rs.getDate("fecha_inicio")),
-                    sdf.format(rs.getDate("fecha_fin")),
-                    rs.getString("estado"),
-                    "Ver"
-                });
-            }
-
-            if (model.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this,
-                        "No se encontraron registros de producción",
-                        "Información", JOptionPane.INFORMATION_MESSAGE);
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("id_produccion"),
+                        rs.getString("descripcion"),
+                        sdf.format(rs.getDate("fecha_inicio")),
+                        rs.getDate("fecha_fin") != null ? sdf.format(rs.getDate("fecha_fin")) : "En proceso",
+                        rs.getString("estado"),
+                        "Ver",
+                        rs.getInt("cantidad"),
+                        rs.getString("dimensiones")
+                    });
+                }
             }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this,
                     "Error al cargar datos: " + e.getMessage(),
-                    "Error",
-                    JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    private void mostrarDetalleCompleto(int idProduccion) {
-        String sql = "SELECT dp.descripcion, dp.cantidad, dp.medidas, dp.precio_unitario "
-                + "FROM produccion p "
-                + "JOIN detalle_pedido dp ON p.detalle_pedido_iddetalle_pedido = dp.iddetalle_pedido "
-                + "WHERE p.id_produccion = ?";
-
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, idProduccion);
-            ResultSet rs = ps.executeQuery();
-
-            if (rs.next()) {
-                String mensaje = String.format("<html><b>Descripción:</b> %s<br>"
-                        + "<b>Cantidad:</b> %s<br>"
-                        + "<b>Medidas:</b> %s<br>"
-                        + "<b>Precio unitario:</b> %.2f</html>",
-                        rs.getString("descripcion"),
-                        rs.getString("cantidad"),
-                        rs.getString("medidas"),
-                        rs.getDouble("precio_unitario"));
-                JOptionPane.showMessageDialog(this, mensaje, "Detalle Completo", JOptionPane.INFORMATION_MESSAGE);
-            }
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al obtener detalles: " + e.getMessage(),
                     "Error", JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 
