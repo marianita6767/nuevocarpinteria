@@ -8,10 +8,16 @@ import java.awt.Frame;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import javax.swing.JList;
+import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import modelo.Conexion;
 
 /**
@@ -19,6 +25,9 @@ import modelo.Conexion;
  * @author pc
  */
 public class FormuEtapaProduccion extends javax.swing.JDialog {
+
+    private JList<String> listMateriales;
+    private JScrollPane scrollMateriales;
 
     /**
      * Creates new form EtapaProduccion
@@ -28,6 +37,12 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(parent);
         txtetapa.setEditable(true); // Habilitar edición del campo
+
+        listMateriales = new JList<>();
+        listMateriales.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        scrollMateriales = new JScrollPane(listMateriales);
+        jPanel1.add(scrollMateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, 200, 100));
+        cargarMaterialesDesdeBD();
     }
 
     /**
@@ -53,6 +68,11 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         btnGuardar1 = new rojeru_san.RSButtonRiple();
         btnCancelar1 = new rojeru_san.RSButtonRiple();
         jLabel12 = new javax.swing.JLabel();
+        txtcantidad = new RSMaterialComponent.RSTextFieldMaterial();
+        Boxmateriales = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel7 = new javax.swing.JLabel();
+        BoxAsignado = new RSMaterialComponent.RSComboBoxMaterial();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setUndecorated(true);
@@ -154,6 +174,51 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
         jLabel12.setForeground(new java.awt.Color(0, 0, 0));
         jLabel12.setText("Nombre etapa:");
         jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 70, -1, -1));
+
+        txtcantidad.setEditable(false);
+        txtcantidad.setBackground(new java.awt.Color(255, 255, 255));
+        txtcantidad.setForeground(new java.awt.Color(0, 0, 0));
+        txtcantidad.setColorMaterial(new java.awt.Color(0, 0, 0));
+        txtcantidad.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtcantidad.setPhColor(new java.awt.Color(0, 0, 0));
+        txtcantidad.setPlaceholder("");
+        txtcantidad.setSelectionColor(new java.awt.Color(0, 0, 0));
+        txtcantidad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtcantidadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(txtcantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 190, 190, 30));
+
+        Boxmateriales.setForeground(new java.awt.Color(102, 102, 102));
+        Boxmateriales.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
+        Boxmateriales.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        Boxmateriales.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxmaterialesActionPerformed(evt);
+            }
+        });
+        jPanel1.add(Boxmateriales, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 180, -1, -1));
+
+        jLabel7.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel7.setText("Materiales:");
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 160, -1, -1));
+
+        BoxAsignado.setForeground(new java.awt.Color(102, 102, 102));
+        BoxAsignado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Seleccionar", "pendiente", "proceso", "completado" }));
+        BoxAsignado.setFont(new java.awt.Font("Roboto Bold", 0, 14)); // NOI18N
+        BoxAsignado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BoxAsignadoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(BoxAsignado, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 260, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 15)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setText("Asignado:");
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 240, -1, -1));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -271,22 +336,82 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     }
 
     private boolean insertarEtapa(String nombre, String estado, Date inicio, Date fin) throws SQLException {
-        String sql = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)";
+        Connection con = null;
+        try {
+            con = new Conexion().getConnection();
+            con.setAutoCommit(false); // Iniciar transacción
 
-        try (Connection con = new Conexion().getConnection(); PreparedStatement ps = con.prepareStatement(sql)) {
+            // 1. Insertar la etapa
+            String sqlEtapa = "INSERT INTO etapa_produccion (nombre_etapa, estado, fecha_inicio, fecha_fin) VALUES (?, ?, ?, ?)";
+            PreparedStatement psEtapa = con.prepareStatement(sqlEtapa, Statement.RETURN_GENERATED_KEYS);
+            psEtapa.setString(1, nombre);
+            psEtapa.setString(2, estado);
+            psEtapa.setDate(3, inicio);
+            psEtapa.setDate(4, fin);
+            psEtapa.executeUpdate();
 
-            ps.setString(1, nombre);
-            ps.setString(2, estado);
-            ps.setDate(3, inicio);
-            ps.setDate(4, fin);
+            // Obtener el ID de la etapa insertada
+            ResultSet rs = psEtapa.getGeneratedKeys();
+            int idEtapa = rs.next() ? rs.getInt(1) : -1;
 
-            return ps.executeUpdate() > 0;
+            if (idEtapa == -1) {
+                throw new SQLException("No se pudo obtener el ID de la etapa");
+            }
+
+            // 2. Insertar los materiales asociados
+            List<String> materialesSeleccionados = listMateriales.getSelectedValuesList();
+            String sqlMaterial = "INSERT INTO etapa_material (id_etapa, id_material) VALUES (?, ?)";
+            PreparedStatement psMaterial = con.prepareStatement(sqlMaterial);
+
+            for (String material : materialesSeleccionados) {
+                // Aquí necesitarías obtener el ID del material basado en su nombre
+                int idMaterial = obtenerIdMaterial(con, material);
+                psMaterial.setInt(1, idEtapa);
+                psMaterial.setInt(2, idMaterial);
+                psMaterial.addBatch();
+            }
+
+            psMaterial.executeBatch();
+            con.commit();
+            return true;
+        } catch (SQLException ex) {
+            if (con != null) {
+                con.rollback();
+            }
+            throw ex;
+        } finally {
+            if (con != null) {
+                con.setAutoCommit(true);
+                con.close();
+            }
         }
+    }
+
+    private int obtenerIdMaterial(Connection con, String nombreMaterial) throws SQLException {
+        String sql = "SELECT id FROM materiales WHERE nombre = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setString(1, nombreMaterial);
+            ResultSet rs = ps.executeQuery();
+            return rs.next() ? rs.getInt(1) : -1;
+        }
+
     }//GEN-LAST:event_btnGuardar1ActionPerformed
 
     private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
         this.dispose();
     }//GEN-LAST:event_btnCancelar1ActionPerformed
+
+    private void txtcantidadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcantidadActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtcantidadActionPerformed
+
+    private void BoxAsignadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxAsignadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_BoxAsignadoActionPerformed
+
+    private void BoxmaterialesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BoxmaterialesActionPerformed
+
+    }//GEN-LAST:event_BoxmaterialesActionPerformed
 
     /**
      * @param args the command line arguments
@@ -322,7 +447,9 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private RSMaterialComponent.RSComboBoxMaterial BoxAsignado;
     private RSMaterialComponent.RSComboBoxMaterial Boxestado;
+    private RSMaterialComponent.RSComboBoxMaterial Boxmateriales;
     private rojeru_san.RSButtonRiple btnCancelar1;
     private rojeru_san.RSButtonRiple btnGuardar1;
     private javax.swing.JLabel jLabel1;
@@ -330,11 +457,34 @@ public class FormuEtapaProduccion extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private com.toedter.calendar.JDateChooser txtFechainicio;
+    private RSMaterialComponent.RSTextFieldMaterial txtcantidad;
     private RSMaterialComponent.RSTextFieldMaterial txtetapa;
     private com.toedter.calendar.JDateChooser txtfechafin;
     // End of variables declaration//GEN-END:variables
+
+    private void cargarMaterialesDesdeBD() {
+        try (Connection con = new Conexion().getConnection(); Statement stmt = con.createStatement(); ResultSet rs = stmt.executeQuery("SELECT nombre FROM inventario")) {
+
+            List<String> materiales = new ArrayList<>();
+            while (rs.next()) {
+                materiales.add(rs.getString("nombre"));
+            }
+
+            // Para JList
+            listMateriales.setListData(materiales.toArray(new String[0]));
+
+            // Para CheckBoxPanel
+            // String[] arrayMateriales = materiales.toArray(new String[0]);
+            // panelMateriales = new CheckBoxPanel(arrayMateriales);
+        } catch (SQLException ex) {
+            Logger.getLogger(FormuEtapaProduccion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
 }
