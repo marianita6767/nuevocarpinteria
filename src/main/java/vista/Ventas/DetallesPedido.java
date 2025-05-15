@@ -378,7 +378,7 @@ public class DetallesPedido extends javax.swing.JPanel {
             }
 
             // Insertar nuevos detalles
-            String sqlInsert = "INSERT INTO detalle_pedido (descripcion, cantidad, dimensiones, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
+            String sqlInsert = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
             try (PreparedStatement stmtInsert = con.prepareStatement(sqlInsert)) {
                 for (PedidoDetalle detalle : detalles) {
                     stmtInsert.setString(1, detalle.getDescripcion());

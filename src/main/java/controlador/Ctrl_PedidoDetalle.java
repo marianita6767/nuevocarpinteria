@@ -26,7 +26,7 @@ public class Ctrl_PedidoDetalle {
 
         try {
             conn = Conexion.getConnection();
-            String sql = "INSERT INTO detalle_pedido (descripcion, cantidad, dimensiones, precio_unitario, subtotal, total, pedido_id_pedido) " +
+            String sql = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) " +
                         "VALUES (?, ?, ?, ?, ?, ?, ?)";
             stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             stmt.setString(1, detalle.getDescripcion());
@@ -76,7 +76,7 @@ public class Ctrl_PedidoDetalle {
                     rs.getInt("iddetalle_pedido"),
                     rs.getString("descripcion"),
                     rs.getInt("cantidad"),
-                    rs.getString("dimensiones"),
+                    rs.getString("dimension"),
                     rs.getDouble("precio_unitario"),
                     rs.getDouble("subtotal"),
                     rs.getDouble("total"),

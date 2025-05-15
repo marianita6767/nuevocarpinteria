@@ -71,7 +71,7 @@ public class Ctrl_Pedido {
 
             // Insertar los detalles
             if (detalles != null && !detalles.isEmpty()) {
-                String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimensiones, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                String sqlDetalle = "INSERT INTO detalle_pedido (descripcion, cantidad, dimension, precio_unitario, subtotal, total, pedido_id_pedido) VALUES (?, ?, ?, ?, ?, ?, ?)";
                 stmt = con.prepareStatement(sqlDetalle);
                 for (PedidoDetalle detalle : detalles) {
                     stmt.setString(1, detalle.getDescripcion());
@@ -194,7 +194,7 @@ public class Ctrl_Pedido {
                         rs.getInt("iddetalle_pedido"),
                         rs.getString("descripcion"),
                         rs.getInt("cantidad"),
-                        rs.getString("dimensiones"),
+                        rs.getString("dimension"),
                         rs.getDouble("precio_unitario"),
                         rs.getDouble("subtotal"),
                         rs.getDouble("total"),
