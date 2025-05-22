@@ -259,14 +259,14 @@ public class pedidoNuevo extends javax.swing.JDialog {
 
         tablaDetalles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null,  new Integer(0), null, "0.0", "0.0", "Eliminar"}
+                {null, "0", null, "0.0", "0.0", "Eliminar"}
             },
             new String [] {
                 "Descripcion", "Cantidad", "Dimesiones", "Precio unitario", "Subtotal", "Accion"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
                 true, true, true, true, false, false
