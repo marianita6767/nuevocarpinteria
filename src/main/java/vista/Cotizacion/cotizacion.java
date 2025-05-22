@@ -413,6 +413,10 @@ public class cotizacion extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombre6ActionPerformed
 
+    private void txt_NombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_NombreClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_NombreClienteActionPerformed
+
     private void Tabla1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Tabla1MouseClicked
         if (evt.getClickCount() == 1) {
             int columna = Tabla1.columnAtPoint(evt.getPoint());
@@ -426,15 +430,15 @@ public class cotizacion extends javax.swing.JPanel {
                 }
             }
         }
-    }
+        }
 
-    private void eliminarFila(int fila) {
-        // Obtener datos del producto a eliminar para mostrar en el mensaje
-        String producto = Tabla1.getValueAt(fila, 0).toString(); // Producto ahora en índice 0
-        String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Cantidad ahora en índice 2
+        private void eliminarFila(int fila) {
+            // Obtener datos del producto a eliminar para mostrar en el mensaje
+            String producto = Tabla1.getValueAt(fila, 0).toString(); // Producto ahora en índice 0
+            String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Cantidad ahora en índice 2
 
-        // Resto del método permanece igual...
-        int confirmacion = JOptionPane.showConfirmDialog(
+            // Resto del método permanece igual...
+            int confirmacion = JOptionPane.showConfirmDialog(
                 this,
                 "<html>¿Está seguro que desea eliminar el producto:<br><br>"
                 + "<b>Producto:</b> " + producto + "<br>"
@@ -443,49 +447,45 @@ public class cotizacion extends javax.swing.JPanel {
                 "Confirmar eliminación",
                 JOptionPane.YES_NO_OPTION,
                 JOptionPane.WARNING_MESSAGE
-        );
+            );
 
-        if (confirmacion == JOptionPane.YES_OPTION) {
-            DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
-            modelo.removeRow(fila);
-            calcularTotal();
+            if (confirmacion == JOptionPane.YES_OPTION) {
+                DefaultTableModel modelo = (DefaultTableModel) Tabla1.getModel();
+                modelo.removeRow(fila);
+                calcularTotal();
 
-            JOptionPane.showMessageDialog(
+                JOptionPane.showMessageDialog(
                     this,
                     "Producto eliminado correctamente",
                     "Eliminación exitosa",
                     JOptionPane.INFORMATION_MESSAGE
-            );
-        }
-    }
-
-    private void editarFila(int fila) {
-        // Obtener los valores de la fila seleccionada con los nuevos índices
-        String producto = Tabla1.getValueAt(fila, 0).toString(); // Índice 0 para Producto
-        String unidad = Tabla1.getValueAt(fila, 1).toString();   // Índice 1 para Unidad
-        String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Índice 2 para Cantidad
-        String valorUnitario = Tabla1.getValueAt(fila, 3).toString().replace("$", "").replace(",", ""); // Índice 3 para Valor Unitario
-
-        // Resto del método permanece igual...
-        txtNombre6.setText(producto);
-
-        for (int i = 0; i < combox_Unidad.getItemCount(); i++) {
-            if (combox_Unidad.getItemAt(i).equals(unidad)) {
-                combox_Unidad.setSelectedIndex(i);
-                break;
+                );
             }
         }
 
-        txtNombre4.setText(cantidad);
-        txtNombre5.setText(valorUnitario);
+        private void editarFila(int fila) {
+            // Obtener los valores de la fila seleccionada con los nuevos índices
+            String producto = Tabla1.getValueAt(fila, 0).toString(); // Índice 0 para Producto
+            String unidad = Tabla1.getValueAt(fila, 1).toString();   // Índice 1 para Unidad
+            String cantidad = Tabla1.getValueAt(fila, 2).toString(); // Índice 2 para Cantidad
+            String valorUnitario = Tabla1.getValueAt(fila, 3).toString().replace("$", "").replace(",", ""); // Índice 3 para Valor Unitario
 
-        Tabla1.putClientProperty("filaEditando", fila);
-        jButton_anadir_producto.setText("  Guardar");
+            // Resto del método permanece igual...
+            txtNombre6.setText(producto);
+
+            for (int i = 0; i < combox_Unidad.getItemCount(); i++) {
+                if (combox_Unidad.getItemAt(i).equals(unidad)) {
+                    combox_Unidad.setSelectedIndex(i);
+                    break;
+                }
+            }
+
+            txtNombre4.setText(cantidad);
+            txtNombre5.setText(valorUnitario);
+
+            Tabla1.putClientProperty("filaEditando", fila);
+            jButton_anadir_producto.setText("  Guardar");
     }//GEN-LAST:event_Tabla1MouseClicked
-
-    private void txt_NombreClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_NombreClienteActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_NombreClienteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
